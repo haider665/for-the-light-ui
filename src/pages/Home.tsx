@@ -1,6 +1,5 @@
 import Hero from '../components/ui/Hero'
 import Button from '../components/ui/Button'
-import Card from '../components/ui/Card'
 import BlogCard from '../components/ui/BlogCard'
 
 const Home = () => {

@@ -1,4 +1,3 @@
-import Hero from '../components/ui/Hero'
 import FeatureCard from '../components/ui/FeatureCard'
 import { Sun, Bell, Shield, MapPin } from 'lucide-react'
 
