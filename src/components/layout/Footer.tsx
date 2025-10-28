@@ -1,0 +1,56 @@
+import { Link } from 'react-router-dom'
+import { Twitter, Facebook, Instagram, Linkedin } from 'lucide-react'
+
+const Footer = () => {
+  return (
+    <footer className="bg-white border-t mt-20">
+      <div className="container mx-auto px-4 py-12">
+        <div className="flex flex-col items-center gap-8">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-primary rounded"></div>
+            <span className="text-xl font-bold">For The Light</span>
+          </Link>
+
+          <nav className="flex flex-wrap justify-center gap-6">
+            <Link to="/" className="hover:text-primary transition-colors">
+              Home
+            </Link>
+            <Link to="/about" className="hover:text-primary transition-colors">
+              About
+            </Link>
+            <Link to="/guardian" className="hover:text-primary transition-colors">
+              Programs
+            </Link>
+            <Link to="/blog" className="hover:text-primary transition-colors">
+              Blog
+            </Link>
+            <Link to="/impact" className="hover:text-primary transition-colors">
+              Contact
+            </Link>
+          </nav>
+
+          <div className="flex gap-6">
+            <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+              <Twitter size={20} />
+            </a>
+            <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+              <Facebook size={20} />
+            </a>
+            <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+              <Instagram size={20} />
+            </a>
+            <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+              <Linkedin size={20} />
+            </a>
+          </div>
+
+          <p className="text-sm text-gray-600">
+            © 2024 For The Light. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+export default Footer
