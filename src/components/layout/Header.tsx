@@ -27,22 +27,36 @@ const Header = () => {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/" className="hover:text-primary transition-colors">
+            {/* <Link to="/" className="hover:text-primary transition-colors">
               Home
+            </Link> */}
+            <Link to="/about" className="hover:text-primary transition-colors">
+              Who We Are
             </Link>
             <Link to="/about" className="hover:text-primary transition-colors">
-              About
+              What We Do
+            </Link>
+            <Link to="/impact" className="hover:text-primary transition-colors">
+              Impact Stories
             </Link>
             <Link to="/guardian" className="hover:text-primary transition-colors">
               The Guardian
             </Link>
-            <Link to="/impact" className="hover:text-primary transition-colors">
-              Impact
-            </Link>
+          
             <Link to="/blog" className="hover:text-primary transition-colors">
-              News
+              Knowledge Hub
             </Link>
-            <Button>Donate</Button>
+            <Link to="/about" className="hover:text-primary transition-colors">
+              Get Involved
+            </Link>
+
+            {/* <Link to="/impact" className="hover:text-primary transition-colors">
+              Impact
+            </Link> */}
+            {/* <Link to="/blog" className="hover:text-primary transition-colors">
+              News
+            </Link> */}
+            <Button>Sign In</Button>
           </nav>
         </div>
       </div>

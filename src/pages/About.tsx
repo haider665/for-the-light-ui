@@ -36,16 +36,29 @@ const About = () => {
           {/* Our Story & Mission */}
           <div className="grid md:grid-cols-2 gap-12 mb-20 max-w-6xl mx-auto">
             <div>
-              <h2 className="text-3xl font-bold mb-6">Our Story</h2>
+              <h2 className="text-3xl font-bold mb-6">We refuse to let our people face alone</h2>
               <p className="text-gray-600 leading-relaxed">
-                For The Light began as a spark of hope in the heart of young activists in
-                Bangladesh, witnessing the devastating impact of climate change on vulnerable
-                communities, particularly women and girls. Driven by a deep commitment to social
-                justice and environmental sustainability, they envisioned a youth-led social
-                enterprise that could bridge the gap between green technology and gender equality.
-                This vision materialized into For The Light, an organization dedicated to building
-                a gender-focused green ecosystem with life-saving technology, empowering
-                communities to thrive in the face of climate challenges.
+                In Bangladesh, the climate crisis is not a distant wave—it is the darkness that falls upon our people. 
+                It's a brutal reality that fuels a devastating Triple Crisis where survival is the highest price.
+                
+                <br/>
+                <br/>
+                The very ground beneath their feet is unstable. From the sudden, merciless landslides in the Hill Tracts 
+                to the relentless, crushing force of cyclones in the deep sea, their homes are the front line. A haunting
+                 fear stalks those who depend on the forest. Fishermen, woodcutters, and honey collectors are tragically 
+                 lost, often because they lack the simplest lifeline—basic SOS technology—to battle the sea's fury or escape
+                  the Royal Bengal Tiger. In coastal, Families are trapped in energy poverty. They spend their scarce income 
+                  on toxic, polluting kerosene—a fuel that clouds their homes with deadly smoke, contributes to greenhouse gases,
+                   and claims tens of thousands of lives yearly. The stress of this economic and climate hardship compounds the 
+                   ultimate betrayal: a hidden safety crisis where coastal women face intimate partner violence in their lifetime.
+                    This cycle of vulnerability, pollution, and peril locks our future in place. But where the light fails, a new 
+                    generation is rising...
+
+                <br/>
+                <br/>
+
+                We refuse to let our people face it alone. The solution is in the hands of a new generation.
+
               </p>
             </div>
             <div>
@@ -61,14 +74,14 @@ const About = () => {
           </div>
 
           {/* The Core Team */}
-          <div>
+          {/* <div>
             <h2 className="text-4xl font-bold text-center mb-16">The Core Team</h2>
             <div className="grid md:grid-cols-4 gap-12 max-w-6xl mx-auto">
               {team.map((member, index) => (
                 <TeamMember key={index} {...member} />
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </>

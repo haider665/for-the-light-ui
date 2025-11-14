@@ -1,5 +1,4 @@
 import Hero from '../components/ui/Hero'
-import Button from '../components/ui/Button'
 import BlogCard from '../components/ui/BlogCard'
 
 const Home = () => {
@@ -7,14 +6,13 @@ const Home = () => {
     <>
       {/* Hero Section */}
       <Hero
-        title="Illuminating Futures, Empowering Change"
-        subtitle="For The Light is a youth-led social enterprise dedicated to building a gender-focused green ecosystem with life-saving technology in Bangladesh."
+        title="We refuse to let our people face alone"
         backgroundImage="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1600"
       >
-        <div className="flex gap-4 justify-center">
+        {/* <div className="flex gap-4 justify-center">
           <Button>Learn More</Button>
           <Button variant="outline">Donate</Button>
-        </div>
+        </div> */}
       </Hero>
 
       {/* The Problem */}
@@ -114,9 +112,31 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12">Our Partners</h2>
           <div className="flex flex-wrap justify-center items-center gap-12">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="w-32 h-32 bg-gray-300 rounded-lg"></div>
-            ))}
+            <img 
+              src="/images/logos/Bridge-for-Billions-logo.png" 
+              alt="Bridge for Billions" 
+              className="h-48 w-auto object-contain"
+            />
+            <img 
+              src="/images/logos/Dhumketu logo.png" 
+              alt="Dhumketu" 
+              className="h-48 w-auto object-contain"
+            />
+            <img 
+              src="/images/logos/UK_International_logo.png" 
+              alt="UK International" 
+              className="h-48 w-auto object-contain"
+            />
+            <img 
+              src="/images/logos/earth logo.png" 
+              alt="Earth" 
+              className="h-48 w-auto object-contain"
+            />
+            <img 
+              src="/images/logos/kingdom-of-the-netherlands-logo.png" 
+              alt="Kingdom of the Netherlands" 
+              className="h-48 w-auto object-contain"
+            />
           </div>
         </div>
       </section>
