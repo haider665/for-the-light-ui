@@ -7,3 +7,16 @@
     @apply font-sans text-gray-800;
   }
 }
+
+@keyframes zoom {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-zoom {
+  animation: zoom 20s ease-in-out infinite;
+}
