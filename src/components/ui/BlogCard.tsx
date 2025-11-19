@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 interface BlogCardProps {
   image: string
@@ -23,12 +24,12 @@ const BlogCard = ({ image, category, title, excerpt, link = '#' }: BlogCardProps
         <span className="inline-block px-3 py-1 text-xs font-semibold text-primary bg-primary/10 rounded-full uppercase tracking-wider">{category}</span>
         <h3 className="text-2xl font-bold mt-4 mb-3 leading-tight group-hover:text-primary transition-colors">{title}</h3>
         <p className="text-gray-600 mb-6 leading-relaxed">{excerpt}</p>
-        <a
-          href={link}
+        <Link
+          to={link}
           className="inline-flex items-center gap-2 text-primary font-semibold hover:gap-4 transition-all duration-300"
         >
           Read More <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-        </a>
+        </Link>
       </div>
     </div>
   )

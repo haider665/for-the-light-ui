@@ -104,18 +104,21 @@ const Home = () => {
               category="Climate Education"
               title="Understanding Climate Change Impacts"
               excerpt="Explore our resources on the specific impacts of climate change in Bangladesh."
+              link="/article/1"
             />
             <BlogCard
               image="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600"
               category="Technology"
               title="Empowering Women Through Technology"
               excerpt="Learn about our innovative technologies that empower women and girls."
+              link="/article/2"
             />
             <BlogCard
               image="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=600"
               category="Community"
               title="Building Climate-Resilient Communities"
               excerpt="Discover our community-led initiatives that are driving lasting change."
+              link="/article/3"
             />
           </div>
         </div>
