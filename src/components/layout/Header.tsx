@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import Button from '../ui/Button'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)

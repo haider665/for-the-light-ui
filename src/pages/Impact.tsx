@@ -1,5 +1,3 @@
-import StatCard from '../components/ui/StatCard'
-import Button from '../components/ui/Button'
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 

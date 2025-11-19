@@ -1,29 +1,4 @@
-import TeamMember from '../components/ui/TeamMember'
-
 const About = () => {
-  const team = [
-    {
-      name: 'Aisha Rahman',
-      title: 'Co-Founder & CEO',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-    },
-    {
-      name: 'Rohan Khan',
-      title: 'Co-Founder & CTO',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-    },
-    {
-      name: 'Fatima Chowdhury',
-      title: 'Head of Programs',
-      image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400',
-    },
-    {
-      name: 'Omar Faruk',
-      title: 'Head of Operations',
-      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
-    },
-  ]
-
   return (
     <>
       <section className="py-32 bg-gradient-to-b from-gray-50 to-white">
