@@ -6,6 +6,8 @@ import Guardian from './pages/Guardian'
 import Impact from './pages/Impact'
 import Blog from './pages/Blog'
 import About from './pages/About'
+import ArticleDetail from './pages/ArticleDetail'
+import Contact from './pages/Contact'
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
             <Route path="/impact" element={<Impact />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/article/:id" element={<ArticleDetail />} />
           </Routes>
         </main>
         <Footer />

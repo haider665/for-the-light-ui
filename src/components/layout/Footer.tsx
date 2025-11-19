@@ -21,10 +21,10 @@ const Footer = () => {
             <Link to="/guardian" className="hover:text-primary transition-colors">
               Programs
             </Link>
-            <Link to="/blog" className="hover:text-primary transition-colors">
-              Blog
-            </Link>
             <Link to="/impact" className="hover:text-primary transition-colors">
+              Impact
+            </Link>
+            <Link to="/contact" className="hover:text-primary transition-colors">
               Contact
             </Link>
           </nav>
