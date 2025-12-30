@@ -17,7 +17,7 @@ const Blog = () => {
   const articles = [
     {
       id: '1',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600',
+      image: "/images/backgrounds/communityLearning.jpg",
       category: 'Technology & Innovation',
       title: 'The Resilience Loop: How Technology Empowers Women in Coastal Bangladesh',
       excerpt:
@@ -25,7 +25,7 @@ const Blog = () => {
     },
     {
       id: '2',
-      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600',
+      image: "/images/backgrounds/fatima.jpg",
       category: 'Policy & Advocacy',
       title: "From Fatima to Policy: Amplifying Women's Voices",
       excerpt:
@@ -33,7 +33,7 @@ const Blog = () => {
     },
     {
       id: '3',
-      image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600',
+      image: "/images/backgrounds/womenEngineering.jpg",
       category: 'Stories from the Field',
       title: 'Engineering for Empathy: Designing with Women at the Center',
       excerpt:
@@ -41,12 +41,16 @@ const Blog = () => {
     },
     {
       id: '4',
-      image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600',
+      image: "/images/backgrounds/womenEmpowerment.jpg",
       category: 'Green Entrepreneurship',
       title: 'Building a Digital Lifeline: Supporting Women-Led Green Businesses',
       excerpt: 'Read about our initiatives to support women entrepreneurs in the green secto...',
     },
   ]
+
+  const filteredArticles = activeFilter === 'All' 
+    ? articles 
+    : articles.filter(article => article.category === activeFilter)
 
   return (
     <>
@@ -91,39 +95,41 @@ const Blog = () => {
           </div>
 
           {/* Featured Article */}
-          <div className="mb-20 max-w-7xl mx-auto">
-            <div className="bg-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 group">
-              <div className="grid md:grid-cols-2 gap-0">
-                <div className="aspect-[4/3] overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10"></div>
-                  <img
-                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800"
-                    alt="Featured"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                </div>
-                <div className="p-12 flex flex-col justify-center space-y-6">
-                  <span className="inline-block px-4 py-2 text-xs font-semibold text-primary bg-primary/10 rounded-full uppercase tracking-wider w-fit">
-                    Technology & Innovation
-                  </span>
-                  <h2 className="text-4xl font-bold leading-tight group-hover:text-primary transition-colors">
-                    The Resilience Loop: How Technology Empowers Women in Coastal Bangladesh
-                  </h2>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    Explore how innovative technologies are helping women in coastal communities
-                    adapt to climate change and build resilience.
-                  </p>
-                  <Link to="/article/1" className="text-primary font-semibold inline-flex items-center gap-3 text-lg hover:gap-5 transition-all">
-                    Read More →
-                  </Link>
+          {(activeFilter === 'All') && (
+            <div className="mb-20 max-w-7xl mx-auto">
+              <div className="bg-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 group">
+                <div className="grid md:grid-cols-2 gap-0">
+                  <div className="aspect-[4/3] overflow-hidden relative">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10"></div>
+                    <img
+                      src="/images/backgrounds/communityLearning.jpg"
+                      alt="Featured"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    />
+                  </div>
+                  <div className="p-12 flex flex-col justify-center space-y-6">
+                    <span className="inline-block px-4 py-2 text-xs font-semibold text-primary bg-primary/10 rounded-full uppercase tracking-wider w-fit">
+                      Technology & Innovation
+                    </span>
+                    <h2 className="text-4xl font-bold leading-tight group-hover:text-primary transition-colors">
+                      The Resilience Loop: How Technology Empowers Women in Coastal Bangladesh
+                    </h2>
+                    <p className="text-lg text-gray-600 leading-relaxed">
+                      Explore how innovative technologies are helping women in coastal communities
+                      adapt to climate change and build resilience.
+                    </p>
+                    <Link to="/article/1" className="text-primary font-semibold inline-flex items-center gap-3 text-lg hover:gap-5 transition-all">
+                      Read More →
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Article Grid */}
           <div className="grid md:grid-cols-3 gap-10 mb-20 max-w-7xl mx-auto">
-            {articles.map((article) => (
+            {filteredArticles.map((article) => (
               <BlogCard key={article.id} {...article} link={`/article/${article.id}`} />
             ))}
           </div>

@@ -67,7 +67,7 @@ const Home = () => {
             <div className="order-2 md:order-1 aspect-square relative group">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent rounded-3xl transform -translate-x-4 translate-y-4"></div>
               <img
-                src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600"
+                src="/images/backgrounds/communityLearning.jpg"
                 alt="Community Meeting"
                 className="w-full h-full object-cover rounded-3xl shadow-2xl relative z-10 transform group-hover:scale-[1.02] transition-transform duration-500"
               />
@@ -100,24 +100,24 @@ const Home = () => {
 
           <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
             <BlogCard
-              image="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=600"
-              category="Climate Education"
-              title="Understanding Climate Change Impacts"
-              excerpt="Explore our resources on the specific impacts of climate change in Bangladesh."
+              image="/images/backgrounds/communityLearning.jpg"
+              category="Technology & Innovation"
+              title="The Resilience Loop: How Technology Empowers Women in Coastal Bangladesh"
+              excerpt="Explore how innovative technologies are helping women in coastal communities adapt to climate change and build resilience."
               link="/article/1"
             />
             <BlogCard
-              image="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600"
-              category="Technology"
-              title="Empowering Women Through Technology"
-              excerpt="Learn about our innovative technologies that empower women and girls."
+              image="/images/backgrounds/fatima.jpg"
+              category="Policy & Advocacy"
+              title="From Fatima to Policy: Amplifying Women's Voices"
+              excerpt="Learn about our advocacy efforts to ensure women's voices are heard in..."
               link="/article/2"
             />
             <BlogCard
-              image="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=600"
-              category="Community"
-              title="Building Climate-Resilient Communities"
-              excerpt="Discover our community-led initiatives that are driving lasting change."
+              image="/images/backgrounds/womenEngineering.jpg"
+              category="Stories from the Field"
+              title="Engineering for Empathy: Designing with Women at the Center"
+              excerpt="Discover our human-centered design approach, ensuring our solutions are..."
               link="/article/3"
             />
           </div>

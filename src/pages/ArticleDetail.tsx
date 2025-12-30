@@ -18,7 +18,7 @@ const ArticleDetail = () => {
       author: 'Aisha Rahman',
       date: 'November 15, 2025',
       readTime: '8 min read',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200',
+      image: "/images/backgrounds/communityLearning.jpg",
       content: `
         <p class="lead">In the heart of Bangladesh's coastal regions, climate change is not a distant threat—it's a daily reality. Rising sea levels, devastating cyclones, and unpredictable weather patterns threaten the lives and livelihoods of millions, particularly women and girls who bear the brunt of climate vulnerability.</p>
 
@@ -77,7 +77,7 @@ const ArticleDetail = () => {
       author: 'Rohan Khan',
       date: 'November 12, 2025',
       readTime: '6 min read',
-      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200',
+      image: "/images/backgrounds/fatima.jpg",
       content: `
         <p class="lead">Policy change begins with people. In Bangladesh, the voices of women in vulnerable communities are transforming how we approach climate adaptation and gender equality at the policy level.</p>
 
@@ -127,7 +127,7 @@ const ArticleDetail = () => {
       author: 'Fatima Chowdhury',
       date: 'November 8, 2025',
       readTime: '7 min read',
-      image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200',
+      image: "/images/backgrounds/womenEngineering.jpg",
       content: `
         <p class="lead">Great technology isn't just functional—it's empathetic. Our human-centered design approach ensures that every solution we create truly serves the women who need it most.</p>
 
@@ -190,7 +190,7 @@ const ArticleDetail = () => {
       author: 'Omar Faruk',
       date: 'November 5, 2025',
       readTime: '5 min read',
-      image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200',
+      image: "/images/backgrounds/womenEmpowerment.jpg",
       content: `
         <p class="lead">Green entrepreneurship is more than business—it's a movement. Our digital platform connects women entrepreneurs, provides resources, and builds a thriving ecosystem of climate solutions.</p>
 
