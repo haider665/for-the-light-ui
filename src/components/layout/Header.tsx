@@ -1,12 +1,15 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Menu, X } from 'lucide-react'
+import Button from '../ui/Button'
+import { useAuth } from '../../context/AuthContext'
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const location = useLocation()
   const isHomePage = location.pathname === '/'
+  const { user, login, logout } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,6 +70,19 @@ const Header = () => {
               <Link to="/contact" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
                 Get Involved
               </Link>
+              {user ? (
+                <div className="flex items-center gap-3">
+                  {user.picture && (
+                    <img src={user.picture} alt={user.name || 'User'} className="w-8 h-8 rounded-full object-cover" />
+                  )}
+                  <Link to="/dashboard" className={`${isScrolled ? 'text-black' : isHomePage ? 'text-white' : 'text-black'} hover:text-primary`}>
+                    Dashboard
+                  </Link>
+                  <Button onClick={logout} className="ml-2">Sign Out</Button>
+                </div>
+              ) : (
+                <Button onClick={login} className="ml-2">Sign In</Button>
+              )}
             </nav>
 
             {/* Mobile Menu Button */}
@@ -120,6 +136,14 @@ const Header = () => {
           >
             Get Involved
           </Link>
+          {user ? (
+            <>
+              <Link to="/dashboard" className="text-gray-900 hover:text-primary transition-colors font-medium">Dashboard</Link>
+              <button onClick={logout} className="px-6 py-2 rounded-full bg-gray-900 text-white hover:bg-black transition">Sign Out</button>
+            </>
+          ) : (
+            <button onClick={login} className="px-6 py-2 rounded-full bg-gray-900 text-white hover:bg-black transition">Sign In</button>
+          )}
         </nav>
       </div>
     </>
