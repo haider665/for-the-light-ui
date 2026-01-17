@@ -1,5 +1,11 @@
 import { useAuth } from '../context/AuthContext'
 
+function formatDate(value?: string) {
+  if (!value) return '—'
+  const d = new Date(value)
+  return isNaN(d.getTime()) ? value : d.toLocaleString()
+}
+
 const Dashboard = () => {
   const { user, logout } = useAuth()
 
@@ -20,7 +26,12 @@ const Dashboard = () => {
           <div className="grid md:grid-cols-2 gap-6">
             <div className="p-6 border rounded-xl">
               <h2 className="font-semibold mb-2">Your Profile</h2>
-              <p className="text-sm text-gray-600">Google account linked. Roles: {user?.roles?.join(', ') || 'none'}</p>
+              <div className="text-sm text-gray-700 space-y-1">
+                <p><span className="font-medium">User ID:</span> {user?.id ?? '—'}</p>
+                <p><span className="font-medium">Roles:</span> {user?.roles?.length ? user.roles.join(', ') : 'none'}</p>
+                <p><span className="font-medium">Created:</span> {formatDate(user?.createdAt)}</p>
+                <p><span className="font-medium">Last Login:</span> {formatDate(user?.lastLogin)}</p>
+              </div>
             </div>
             <div className="p-6 border rounded-xl">
               <h2 className="font-semibold mb-2">Quick Actions</h2>

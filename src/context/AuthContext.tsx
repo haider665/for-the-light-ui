@@ -213,7 +213,10 @@ type User = {
   email?: string
   picture?: string
   sub?: string
+  id?: number | string
   roles?: string[]
+  createdAt?: string
+  lastLogin?: string
 }
 
 type AuthContextValue = {
