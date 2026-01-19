@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import Card from '../components/ui/Card'
 import { Link } from 'react-router-dom'
 import { divisions, districts, upazilas } from '../data/bdLocations'
+import { API_BASE_URL } from '../config/api'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
 type Incident = {
   id: number

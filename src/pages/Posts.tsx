@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { divisions, districts, upazilas } from '../data/bdLocations'
+import { API_BASE_URL } from '../config/api'
 import Sidebar from '../components/dashboard/Sidebar'
 
 type Incident = {
@@ -9,6 +10,10 @@ type Incident = {
   description: string
   status: string
   location: {
+    // optional human-readable names if backend provides them
+    division?: string
+    district?: string
+    upazila?: string
     divisionCode?: string
     districtCode?: string
     upazilaCode?: string
@@ -22,7 +27,6 @@ type Incident = {
   updatedAt: string
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
 function codeToDivisionName(code?: string) {
   if (!code) return undefined

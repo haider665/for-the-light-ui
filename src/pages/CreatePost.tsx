@@ -104,8 +104,8 @@ const BD_DATA = {
   ],
 }
 
-// Provide API base URL (env overrides default localhost:8080)
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
+// API base URL from shared config
+import { API_BASE_URL } from '../config/api'
 
 // Read cookie without decoding (Spring expects raw value)
 function getCookie(name: string): string | undefined {
@@ -128,7 +128,7 @@ const CreatePost = () => {
   const [divisionCode, setDivisionCode] = useState('')
   const [districtCode, setDistrictCode] = useState('')
   const [upazilaCode, setUpazilaCode] = useState('')
-  const [files, setFiles] = useState<File[]>([])
+  // removed unused local files state to satisfy TS
   const [marker, setMarker] = useState<LatLng | null>(null)
   const [center, setCenter] = useState<LatLng>({ lat: 23.685, lng: 90.3563 }) // Bangladesh approx
   const [imageUrls, setImageUrls] = useState<string[]>([])
@@ -174,9 +174,7 @@ const CreatePost = () => {
   }, [divisionCode, districtCode])
 
   // derive human-readable names from selected codes
-  const divisionName = useMemo(() => BD_DATA.divisions.find(d => d.name === divisionCode)?.name ?? null, [divisionCode])
-  const districtName = useMemo(() => filteredDistricts.find(d => d === districtCode) ?? null, [districtCode, filteredDistricts])
-  const upazilaName = useMemo(() => filteredUpazilas.find(u => u === upazilaCode) ?? null, [upazilaCode, filteredUpazilas])
+  // removed unused derived names to satisfy TS; payload uses selected names directly
 
   const cloudinaryReady = Boolean(CLOUDINARY_CLOUD_NAME && CLOUDINARY_UPLOAD_PRESET)
 
@@ -217,7 +215,6 @@ const CreatePost = () => {
 
   const onFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const list = e.target.files ? Array.from(e.target.files) : []
-    setFiles(list)
     setImageUrls([])
     setUploadError(null)
     if (!list.length) return
@@ -271,6 +268,9 @@ const CreatePost = () => {
         credentials: 'include', // include cookies/session
         body: JSON.stringify(payload),
       })
+      if (res.status === 401 || res.status === 302) {
+        setNeedsAuth(true)
+      }
       const data = await res.json().catch(() => ({}))
       const status = res.ok ? 'success' : (data.status ?? 'failed')
       const message = data.message ?? (res.ok ? 'Incident created successfully.' : 'Failed to create incident.')

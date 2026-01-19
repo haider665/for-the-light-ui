@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { divisions, districts, upazilas } from '../data/bdLocations'
+import { API_BASE_URL } from '../config/api'
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import { Icon, DivIcon } from 'leaflet'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
 
 type Incident = {
   id: number
@@ -113,7 +113,7 @@ export default function IncidentDetail() {
     return <main className="pt-24"><div className="container mx-auto px-4"><p>No incident found.</p></div></main>
   }
 
-  const heroImage = item.images?.[0] || '/images/temp/test.png'
+  // removed unused heroImage to satisfy TS; gallery shows images directly
 
   return (
     <main className="pt-24">
