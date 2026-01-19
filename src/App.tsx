@@ -9,8 +9,10 @@ import About from './pages/About'
 import ArticleDetail from './pages/ArticleDetail'
 import Contact from './pages/Contact'
 import Dashboard from './pages/Dashboard'
+import CreatePost from './pages/CreatePost'
 import ProtectedRoute from './routes/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
+import Posts from './pages/Posts'
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
               <Route path="/article/:id" element={<ArticleDetail />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/posts" element={<Posts />} />
+                <Route path="/posts/new" element={<CreatePost />} />
               </Route>
             </Routes>
           </main>
