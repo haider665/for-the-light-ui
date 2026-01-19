@@ -67,6 +67,9 @@ const Header = () => {
               <Link to="/blog" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
                 Knowledge Hub
               </Link>
+              <Link to="/incidents" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
+                Incidents
+              </Link>
               <Link to="/contact" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
                 Get Involved
               </Link>
@@ -129,6 +132,12 @@ const Header = () => {
             className="text-gray-900 hover:text-primary transition-colors font-medium"
           >
             Knowledge Hub
+          </Link>
+          <Link
+            to="/incidents"
+            className="text-gray-900 hover:text-primary transition-colors font-medium"
+          >
+            Incidents
           </Link>
           <Link
             to="/contact"

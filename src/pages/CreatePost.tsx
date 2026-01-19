@@ -147,6 +147,12 @@ const CreatePost = () => {
   const [submitResult, setSubmitResult] = useState<{ status?: string; message?: string } | null>(null)
   const [needsAuth, setNeedsAuth] = useState(false)
 
+  // Backend validation constraints
+  const TITLE_MIN = 3
+  const TITLE_MAX = 200
+  const DESC_MIN = 10
+  const DESC_MAX = 5000
+
   useEffect(() => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -224,8 +230,22 @@ const CreatePost = () => {
 
   const validate = () => {
     const e: typeof errors = {}
-    if (!title.trim()) e.title = 'Title is required.'
-    if (!description.trim()) e.description = 'Description is required.'
+    const tlen = title.trim().length
+    const dlen = description.trim().length
+    if (!title.trim()) {
+      e.title = 'Title is required.'
+    } else if (tlen < TITLE_MIN) {
+      e.title = `Title must be at least ${TITLE_MIN} characters.`
+    } else if (tlen > TITLE_MAX) {
+      e.title = `Title must be at most ${TITLE_MAX} characters.`
+    }
+    if (!description.trim()) {
+      e.description = 'Description is required.'
+    } else if (dlen < DESC_MIN) {
+      e.description = `Description must be at least ${DESC_MIN} characters.`
+    } else if (dlen > DESC_MAX) {
+      e.description = `Description must be at most ${DESC_MAX} characters.`
+    }
     if (!divisionCode) e.division = 'Division is required.'
     if (!districtCode) e.district = 'District is required.'
     if (!upazilaCode) e.upazila = 'Upazila is required.'
@@ -307,13 +327,26 @@ const CreatePost = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Title</label>
-                <input value={title} onChange={e => setTitle(e.target.value)} className="w-full border rounded-md px-3 py-2" />
+                <input
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                  maxLength={TITLE_MAX}
+                  className="w-full border rounded-md px-3 py-2"
+                />
+                <div className="mt-1 text-xs text-gray-500">{title.trim().length}/{TITLE_MAX}</div>
                 {errors.title && <div className="mt-1 text-xs text-red-600">{errors.title}</div>}
               </div>
 
               <div>
                 <label className="block text-sm font-medium mb-1">Description</label>
-                <textarea value={description} onChange={e => setDescription(e.target.value)} rows={6} className="w-full border rounded-md px-3 py-2" />
+                <textarea
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  rows={6}
+                  maxLength={DESC_MAX}
+                  className="w-full border rounded-md px-3 py-2"
+                />
+                <div className="mt-1 text-xs text-gray-500">{description.trim().length}/{DESC_MAX}</div>
                 {errors.description && <div className="mt-1 text-xs text-red-600">{errors.description}</div>}
               </div>
 
