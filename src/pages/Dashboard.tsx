@@ -21,8 +21,8 @@ const Dashboard = () => {
           <section className="flex-1 min-h-[60vh]">
             {/* Mobile quick actions */}
             <div className="md:hidden mb-4 flex gap-3">
-              <Link to="/posts/new" className="px-4 py-2 rounded-md bg-gray-900 text-white">New Post</Link>
-              <Link to="/posts" className="px-4 py-2 rounded-md border border-gray-300">All Posts</Link>
+              <Link to="/posts/new" className="px-4 py-2 rounded-md bg-gray-900 text-white">New Incident</Link>
+              <Link to="/posts" className="px-4 py-2 rounded-md border border-gray-300">All Incidents</Link>
             </div>
 
             <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-sm p-8">

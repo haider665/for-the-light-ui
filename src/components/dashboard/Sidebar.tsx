@@ -10,15 +10,15 @@ const Sidebar = () => {
   return (
     <aside className="w-64 shrink-0 border-r bg-white h-[calc(100vh-96px)] sticky top-24">
       <div className="p-4">
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Posts</h2>
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Incidents</h2>
         <nav className="mt-3 grid gap-1">
           <Link to="/posts/new" className={`${itemBase} ${pathname === '/posts/new' ? active : inactive}`}>
             <FilePlus size={18} />
-            <span>New Post</span>
+            <span>New Incident</span>
           </Link>
           <Link to="/posts" className={`${itemBase} ${pathname === '/posts' ? active : inactive}`}>
             <List size={18} />
-            <span>All Posts</span>
+            <span>All Incidents</span>
           </Link>
         </nav>
       </div>
