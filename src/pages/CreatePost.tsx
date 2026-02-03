@@ -105,21 +105,21 @@ const BD_DATA = {
 }
 
 // API base URL from shared config
-import { API_BASE_URL } from '../config/api'
+import api, { API_BASE_URL } from '../config/api'
 
 // Read cookie without decoding (Spring expects raw value)
-function getCookie(name: string): string | undefined {
-  const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'))
-  return match ? match[1] : undefined
-}
+// function getCookie(name: string): string | undefined {
+//   const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'))
+//   return match ? match[1] : undefined
+// }
 
 // Ensure CSRF cookie is present, then return token
-async function ensureCsrf(): Promise<string> {
-  try {
-    await fetch(`${API_BASE_URL}/csrf`, { credentials: 'include' })
-  } catch { }
-  return getCookie('XSRF-TOKEN') || ''
-}
+// async function ensureCsrf(): Promise<string> {
+//   try {
+//     await fetch(`${API_BASE_URL}/csrf`, { credentials: 'include' })
+//   } catch { }
+//   return getCookie('XSRF-TOKEN') || ''
+// }
 
 const CreatePost = () => {
   useAuth() // ensures provider is loaded; ProtectedRoute gates access
@@ -258,24 +258,16 @@ const CreatePost = () => {
     if (!validate()) return
     setSubmitting(true)
     try {
-      const csrfToken = await ensureCsrf()
-      const res = await fetch(`${API_BASE_URL}/incident`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-XSRF-TOKEN': csrfToken, // send CSRF token
-        },
-        credentials: 'include', // include cookies/session
-        body: JSON.stringify(payload),
-      })
-      if (res.status === 401 || res.status === 302) {
+      // With JWT, we rely on the Authorization header, not CSRF cookie + X-XSRF-TOKEN
+      const res = await api.post('/incident', payload)
+
+      const status = res.status === 200 || res.status === 201 ? 'success' : (res.data.status ?? 'failed')
+      const message = res.data.message ?? 'Incident created successfully.'
+      setSubmitResult({ status, message })
+    } catch (e: any) {
+      if (e.response && (e.response.status === 401 || e.response.status === 302)) {
         setNeedsAuth(true)
       }
-      const data = await res.json().catch(() => ({}))
-      const status = res.ok ? 'success' : (data.status ?? 'failed')
-      const message = data.message ?? (res.ok ? 'Incident created successfully.' : 'Failed to create incident.')
-      setSubmitResult({ status, message })
-    } catch {
       setSubmitResult({ status: 'failed', message: 'Network/CORS error. Please try again.' })
     } finally {
       setSubmitting(false)

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { divisions, districts, upazilas } from '../data/bdLocations'
-import { API_BASE_URL } from '../config/api'
+import api, { API_BASE_URL } from '../config/api'
 import Sidebar from '../components/dashboard/Sidebar'
 
 type Incident = {
@@ -62,22 +62,15 @@ const Posts = () => {
     setError(null)
     setNeedsAuth(false)
     try {
-      const res = await fetch(`${API_BASE_URL}/incident/user`, {
-        credentials: 'include',
-      })
-      if (res.status === 401 || res.status === 302) {
+      const res = await api.get('/incident/user')
+      setData(res.data)
+    } catch (e: any) {
+      if (e.response && (e.response.status === 401 || e.response.status === 302)) {
         setNeedsAuth(true)
         setData([])
-        return
+      } else {
+        setError(e?.message || 'Something went wrong')
       }
-      if (!res.ok) {
-        const text = await res.text()
-        throw new Error(text || 'Failed to load incidents')
-      }
-      const json = (await res.json()) as Incident[]
-      setData(json)
-    } catch (e: any) {
-      setError(e?.message || 'Something went wrong')
     } finally {
       setLoading(false)
     }

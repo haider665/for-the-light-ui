@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Card from '../components/ui/Card'
 import { Link } from 'react-router-dom'
 import { divisions, districts, upazilas } from '../data/bdLocations'
-import { API_BASE_URL } from '../config/api'
+import api from '../config/api'
 
 
 type Incident = {
@@ -52,8 +52,8 @@ function fmtDate(iso?: string) {
 const StatusPill = ({ status }: { status: string }) => {
   const color = status === 'PENDING' ? 'bg-yellow-100 text-yellow-800'
     : status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800'
-    : status === 'RESOLVED' ? 'bg-green-100 text-green-800'
-    : 'bg-gray-100 text-gray-800'
+      : status === 'RESOLVED' ? 'bg-green-100 text-green-800'
+        : 'bg-gray-100 text-gray-800'
   return <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${color}`}>{status}</span>
 }
 
@@ -67,10 +67,8 @@ export default function Incidents() {
       setLoading(true)
       setError(null)
       try {
-        const res = await fetch(`${API_BASE_URL}/incident/all`)
-        if (!res.ok) throw new Error(await res.text() || 'Failed to load incidents')
-        const json = await res.json() as Incident[]
-        setItems(json)
+        const res = await api.get('/incident/all')
+        setItems(res.data)
       } catch (e: any) {
         setError(e?.message || 'Something went wrong')
       } finally {

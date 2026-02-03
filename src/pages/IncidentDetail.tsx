@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { divisions, districts, upazilas } from '../data/bdLocations'
-import { API_BASE_URL } from '../config/api'
+import api from '../config/api'
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import { Icon, DivIcon } from 'leaflet'
@@ -46,8 +46,8 @@ function codeToUpazilaName(code?: string) {
 const StatusPill = ({ status }: { status: string }) => {
   const color = status === 'PENDING' ? 'bg-yellow-100 text-yellow-800'
     : status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800'
-    : status === 'RESOLVED' ? 'bg-green-100 text-green-800'
-    : 'bg-gray-100 text-gray-800'
+      : status === 'RESOLVED' ? 'bg-green-100 text-green-800'
+        : 'bg-gray-100 text-gray-800'
   return <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${color}`}>{status}</span>
 }
 
@@ -82,10 +82,8 @@ export default function IncidentDetail() {
       setLoading(true)
       setError(null)
       try {
-        const res = await fetch(`${API_BASE_URL}/incident/all/${id}`)
-        if (!res.ok) throw new Error(await res.text() || 'Failed to load incident')
-        const json = await res.json() as Incident
-        setItem(json)
+        const res = await api.get(`/incident/all/${id}`)
+        setItem(res.data)
       } catch (e: any) {
         setError(e?.message || 'Something went wrong')
       } finally {
@@ -179,7 +177,7 @@ export default function IncidentDetail() {
               {item.images?.length ? (
                 item.images.map((img, idx) => (
                   <div key={idx} className="aspect-video bg-gray-100 overflow-hidden rounded-lg">
-                    <img src={img} alt={`${item.title} ${idx+1}`} className="w-full h-full object-cover" loading="lazy" />
+                    <img src={img} alt={`${item.title} ${idx + 1}`} className="w-full h-full object-cover" loading="lazy" />
                   </div>
                 ))
               ) : (

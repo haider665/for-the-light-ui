@@ -15,6 +15,7 @@ import CreatePost from './pages/CreatePost'
 import ProtectedRoute from './routes/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import Posts from './pages/Posts'
+import OAuth2RedirectHandler from './components/auth/OAuth2RedirectHandler'
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
                 <Route path="/posts" element={<Posts />} />
                 <Route path="/posts/new" element={<CreatePost />} />
               </Route>
+              <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
             </Routes>
           </main>
           <Footer />

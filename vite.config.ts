@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': { target, changeOrigin: true },
-        '/oauth2': { target, changeOrigin: true },
+        // '/oauth2': { target, changeOrigin: true }, // Don't proxy this; React handles /oauth2/redirect
         '/logout': { target, changeOrigin: true },
         '/user': { target, changeOrigin: true },
         '/csrf': { target, changeOrigin: true },
