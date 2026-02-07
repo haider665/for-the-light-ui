@@ -1,11 +1,15 @@
 import { Link, useLocation } from 'react-router-dom'
-import { FilePlus, List } from 'lucide-react'
+import { FilePlus, List, Users as UsersIcon } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
 
 const Sidebar = () => {
   const { pathname } = useLocation()
+  const { user } = useAuth()
   const itemBase = 'flex items-center gap-2 px-3 py-2 rounded-md transition-colors'
   const active = 'bg-gray-100 text-gray-900'
   const inactive = 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+
+  const isSuperAdmin = user?.roles?.includes('SUPER_ADMIN')
 
   return (
     <aside className="w-64 shrink-0 border-r bg-white h-[calc(100vh-96px)] sticky top-24">
@@ -21,6 +25,18 @@ const Sidebar = () => {
             <span>All Incidents</span>
           </Link>
         </nav>
+
+        {isSuperAdmin && (
+          <>
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mt-6">Admin</h2>
+            <nav className="mt-3 grid gap-1">
+              <Link to="/users" className={`${itemBase} ${pathname === '/users' ? active : inactive}`}>
+                <UsersIcon size={18} />
+                <span>User Management</span>
+              </Link>
+            </nav>
+          </>
+        )}
       </div>
     </aside>
   )
