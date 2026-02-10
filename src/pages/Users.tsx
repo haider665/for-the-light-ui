@@ -4,7 +4,7 @@ import Sidebar from '../components/dashboard/Sidebar'
 import api from '../config/api'
 import { Search, Check, X } from 'lucide-react'
 
-type User = {
+export type User = {
     id: number
     email: string
     name: string

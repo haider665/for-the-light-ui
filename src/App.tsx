@@ -17,6 +17,9 @@ import { AuthProvider } from './context/AuthContext'
 import Posts from './pages/Posts'
 import Users from './pages/Users'
 import OAuth2RedirectHandler from './components/auth/OAuth2RedirectHandler'
+import Programs from './pages/Programs'
+import PublicPrograms from './pages/PublicPrograms'
+import ProgramDetail from './pages/ProgramDetail'
 
 function App() {
   return (
@@ -35,11 +38,14 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/article/:id" element={<ArticleDetail />} />
+              <Route path="/programs" element={<PublicPrograms />} />
+              <Route path="/programs/:id" element={<ProgramDetail />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/posts" element={<Posts />} />
                 <Route path="/posts/new" element={<CreatePost />} />
                 <Route path="/users" element={<Users />} />
+                <Route path="/admin/programs" element={<Programs />} />
               </Route>
               <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
             </Routes>
