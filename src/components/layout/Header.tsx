@@ -39,16 +39,15 @@ const Header = () => {
   return (
     <>
       <header
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
-        }`}
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
+          }`}
       >
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3 z-50">
-              <img 
-                src="/images/logos/for the light_logo-01.png" 
-                alt="For The Light" 
+              <img
+                src="/images/logos/for the light_logo-01.png"
+                alt="For The Light"
                 className="h-16 md:h-24 w-auto object-contain"
               />
             </Link>
@@ -69,6 +68,9 @@ const Header = () => {
               </Link>
               <Link to="/incidents" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
                 Incidents
+              </Link>
+              <Link to="/programs" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
+                Programs
               </Link>
               <Link to="/contact" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
                 Get Involved
@@ -91,9 +93,8 @@ const Header = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`md:hidden z-50 p-2 transition-colors ${
-                isScrolled || isMobileMenuOpen ? 'text-black' : isHomePage ? 'text-white' : 'text-black'
-              }`}
+              className={`md:hidden z-50 p-2 transition-colors ${isScrolled || isMobileMenuOpen ? 'text-black' : isHomePage ? 'text-white' : 'text-black'
+                }`}
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -104,9 +105,8 @@ const Header = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed inset-0 bg-white z-40 md:hidden transition-all duration-300 ${
-          isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-        }`}
+        className={`fixed inset-0 bg-white z-40 md:hidden transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+          }`}
       >
         <nav className="flex flex-col items-center justify-center h-full gap-8 text-2xl">
           <Link
@@ -138,6 +138,12 @@ const Header = () => {
             className="text-gray-900 hover:text-primary transition-colors font-medium"
           >
             Incidents
+          </Link>
+          <Link
+            to="/programs"
+            className="text-gray-900 hover:text-primary transition-colors font-medium"
+          >
+            Programs
           </Link>
           <Link
             to="/contact"
