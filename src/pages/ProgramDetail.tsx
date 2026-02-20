@@ -75,10 +75,10 @@ export default function ProgramDetail() {
                             )}
                         </div>
 
-                        <div className="p-8">
+                        <div className="p-5 sm:p-6 md:p-8">
                             <div className="flex flex-col md:flex-row gap-8 justify-between items-start mb-8">
                                 <div className="flex-1">
-                                    <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">{program.title}</h1>
+                                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-gray-900">{program.title}</h1>
                                     <div className="flex flex-wrap gap-4 text-gray-600">
                                         <div className="flex items-center gap-2">
                                             <Calendar size={18} />
@@ -113,7 +113,7 @@ export default function ProgramDetail() {
                                             Sign in to Enroll
                                         </button>
                                     )}
-                                    <p className="mt-3 text-xs text-center text-gray-500 max-w-[200px]">
+                                    <p className="mt-3 text-xs text-center text-gray-500 md:max-w-[200px]">
                                         <AlertCircle size={12} className="inline mr-1" />
                                         Registration closes {fmtDate(program.registrationDeadline)}
                                     </p>

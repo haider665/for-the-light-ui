@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import Sidebar from '../components/dashboard/Sidebar'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet'
 import { Icon, DivIcon } from 'leaflet' // added DivIcon
 import 'leaflet/dist/leaflet.css' // ensure Leaflet layout is correct
@@ -123,6 +124,10 @@ import api, { API_BASE_URL } from '../config/api'
 
 const CreatePost = () => {
   useAuth() // ensures provider is loaded; ProtectedRoute gates access
+  const { id } = useParams<{ id?: string }>()
+  const navigate = useNavigate()
+  const isEditMode = Boolean(id)
+  const [loadingIncident, setLoadingIncident] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [divisionCode, setDivisionCode] = useState('')
@@ -161,6 +166,35 @@ const CreatePost = () => {
       )
     }
   }, [])
+
+  useEffect(() => {
+    if (!id) return
+    const fetchIncident = async () => {
+      setLoadingIncident(true)
+      try {
+        const res = await api.get(`/incident/all/${id}`)
+        const inc = res.data
+        setTitle(inc.title || '')
+        setDescription(inc.description || '')
+        if (inc.location) {
+          setDivisionCode(inc.location.division || '')
+          setDistrictCode(inc.location.district || '')
+          setUpazilaCode(inc.location.upazila || '')
+          if (inc.location.lat != null && inc.location.lng != null) {
+            const pos = { lat: inc.location.lat, lng: inc.location.lng }
+            setMarker(pos)
+            setCenter(pos)
+          }
+        }
+        if (inc.images?.length) setImageUrls(inc.images)
+      } catch (e: any) {
+        setSubmitResult({ status: 'failed', message: e?.message || 'Failed to load incident.' })
+      } finally {
+        setLoadingIncident(false)
+      }
+    }
+    fetchIncident()
+  }, [id])
 
   const filteredDistricts = useMemo(() => {
     const div = BD_DATA.divisions.find(d => d.name === divisionCode)
@@ -258,12 +292,16 @@ const CreatePost = () => {
     if (!validate()) return
     setSubmitting(true)
     try {
-      // With JWT, we rely on the Authorization header, not CSRF cookie + X-XSRF-TOKEN
-      const res = await api.post('/incident', payload)
-
-      const status = res.status === 200 || res.status === 201 ? 'success' : (res.data.status ?? 'failed')
-      const message = res.data.message ?? 'Incident created successfully.'
-      setSubmitResult({ status, message })
+      if (isEditMode) {
+        await api.post(`/incident/${id}`, payload)
+        setSubmitResult({ status: 'success', message: 'Incident updated successfully.' })
+        setTimeout(() => navigate('/posts'), 1200)
+      } else {
+        const res = await api.post('/incident', payload)
+        const status = res.status === 200 || res.status === 201 ? 'success' : (res.data.status ?? 'failed')
+        const message = res.data.message ?? 'Incident created successfully.'
+        setSubmitResult({ status, message })
+      }
     } catch (e: any) {
       if (e.response && (e.response.status === 401 || e.response.status === 302)) {
         setNeedsAuth(true)
@@ -313,7 +351,15 @@ const CreatePost = () => {
         <div className="flex gap-6">
           <Sidebar />
           <div className="flex-1 min-w-0 bg-white rounded-2xl shadow-sm p-8">
-            <h1 className="text-2xl font-bold mb-6">Create Post</h1>
+            <div className="md:hidden mb-4 flex flex-wrap gap-2">
+              <Link to="/dashboard" className="px-3 py-2 rounded-md border border-gray-300">Dashboard</Link>
+              <Link to="/posts" className="px-3 py-2 rounded-md border border-gray-300">All Incidents</Link>
+            </div>
+
+            <h1 className="text-2xl font-bold mb-6">{isEditMode ? 'Edit Incident' : 'Create Incident'}</h1>
+            {loadingIncident && (
+              <div className="mb-4 text-sm text-gray-500 animate-pulse">Loading incident data…</div>
+            )}
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-4">
@@ -382,7 +428,7 @@ const CreatePost = () => {
                   {uploadError && <div className="mt-2 text-xs text-red-600">{uploadError}</div>}
                   {errors.images && <div className="mt-2 text-xs text-red-600">{errors.images}</div>}
                   {imageUrls.length > 0 && (
-                    <div className="mt-3 grid grid-cols-3 gap-3">
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                       {imageUrls.map((url, idx) => (
                         <div key={idx} className="border rounded-md p-2 text-xs text-gray-600">
                           <a href={url} target="_blank" rel="noreferrer" className="text-blue-600 break-all">Image URL</a>
@@ -394,7 +440,7 @@ const CreatePost = () => {
               </div>
 
               <div>
-                <div className="h-[420px] w-full rounded-md overflow-hidden border">
+                <div className="h-[300px] sm:h-[420px] w-full rounded-md overflow-hidden border">
                   <MapContainer
                     center={[center.lat, center.lng]}
                     zoom={8}
@@ -430,8 +476,16 @@ const CreatePost = () => {
             </div>
 
             <div className="mt-8 flex gap-3">
-              <button className="px-4 py-2 rounded-full bg-primary text-white" disabled={uploading || submitting} onClick={handleSubmit}>Save</button>
-              <button className="px-4 py-2 rounded-full border">Cancel</button>
+              <button
+                className="px-4 py-2 rounded-full bg-primary text-white disabled:opacity-60"
+                disabled={uploading || submitting || loadingIncident}
+                onClick={handleSubmit}
+              >
+                {submitting
+                  ? (isEditMode ? 'Updating…' : 'Saving…')
+                  : (isEditMode ? 'Update' : 'Save')}
+              </button>
+              <button className="px-4 py-2 rounded-full border" onClick={() => navigate('/posts')}>Cancel</button>
             </div>
             {submitResult && (
               <div className={`mt-2 text-sm ${submitResult.status === 'success' ? 'text-green-600' : 'text-red-600'}`}>
@@ -449,7 +503,6 @@ const CreatePost = () => {
               </div>
             )}
 
-            <pre className="mt-6 text-xs bg-gray-50 p-3 rounded border overflow-auto">{JSON.stringify(payload, null, 2)}</pre>
           </div>
         </div>
       </div>

@@ -1,21 +1,21 @@
 const About = () => {
   return (
     <>
-      <section className="py-32 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-20 md:py-32 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-20">
+          <div className="text-center mb-14 md:mb-20">
             <span className="inline-block text-sm font-semibold tracking-wider text-primary uppercase mb-4">About Us</span>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">We are For The Light</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-6">We are For The Light</h1>
           </div>
 
           {/* Our Story & Mission */}
-          <div className="grid md:grid-cols-2 gap-16 mb-32 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-10 md:gap-16 mb-20 md:mb-32 max-w-7xl mx-auto">
             <div className="space-y-6">
               <div className="inline-block px-4 py-2 bg-primary/10 rounded-full">
                 <span className="text-sm font-semibold text-primary">Our Story</span>
               </div>
-              <h2 className="text-4xl font-bold leading-tight">We refuse to let our people face alone</h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <h2 className="text-2xl md:text-4xl font-bold leading-tight">We refuse to let our people face alone</h2>
+              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                 In Bangladesh, the climate crisis is not a distant wave—it is the darkness that falls upon our people. 
                 It's a brutal reality that fuels a devastating Triple Crisis where survival is the highest price.
                 
@@ -43,8 +43,8 @@ const About = () => {
               <div className="inline-block px-4 py-2 bg-primary/10 rounded-full">
                 <span className="text-sm font-semibold text-primary">Mission & Vision</span>
               </div>
-              <h2 className="text-4xl font-bold leading-tight">Mission & Vision</h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <h2 className="text-2xl md:text-4xl font-bold leading-tight">Mission & Vision</h2>
+              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                 Our mission is to empower communities in Bangladesh, especially women and girls, by
                 providing access to life-saving green technologies and fostering a gender-inclusive
                 approach to climate resilience. We envision a future where every individual,

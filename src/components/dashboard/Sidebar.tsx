@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { FilePlus, List, Users as UsersIcon, Calendar } from 'lucide-react'
+import { FilePlus, List, Users as UsersIcon, Calendar, AlertTriangle } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const Sidebar = () => {
@@ -12,7 +12,7 @@ const Sidebar = () => {
   const isSuperAdmin = user?.roles?.includes('SUPER_ADMIN')
 
   return (
-    <aside className="w-64 shrink-0 border-r bg-white h-[calc(100vh-96px)] sticky top-24">
+    <aside className="hidden md:block w-64 shrink-0 border-r bg-white h-[calc(100vh-96px)] sticky top-24">
       <div className="p-4">
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Incidents</h2>
         <nav className="mt-3 grid gap-1">
@@ -37,6 +37,10 @@ const Sidebar = () => {
               <Link to="/admin/programs" className={`${itemBase} ${pathname === '/admin/programs' ? active : inactive}`}>
                 <Calendar size={18} />
                 <span>Program Management</span>
+              </Link>
+              <Link to="/admin/incidents" className={`${itemBase} ${pathname === '/admin/incidents' ? active : inactive}`}>
+                <AlertTriangle size={18} />
+                <span>Incident Management</span>
               </Link>
             </nav>
           </>

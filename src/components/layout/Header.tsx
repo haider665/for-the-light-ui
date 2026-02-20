@@ -42,18 +42,18 @@ const Header = () => {
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
           }`}
       >
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-2 sm:py-3 md:py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3 z-50">
               <img
                 src="/images/logos/for the light_logo-01.png"
                 alt="For The Light"
-                className="h-16 md:h-24 w-auto object-contain"
+                className="h-12 sm:h-14 md:h-20 lg:h-24 w-auto object-contain"
               />
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-8">
               <Link to="/about" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
                 Who We Are
               </Link>
@@ -67,7 +67,7 @@ const Header = () => {
                 Knowledge Hub
               </Link>
               <Link to="/incidents" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
-                Incidents
+                Community Watch
               </Link>
               <Link to="/programs" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
                 Programs
@@ -93,7 +93,7 @@ const Header = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`md:hidden z-50 p-2 transition-colors ${isScrolled || isMobileMenuOpen ? 'text-black' : isHomePage ? 'text-white' : 'text-black'
+              className={`lg:hidden z-50 p-2 transition-colors ${isScrolled || isMobileMenuOpen ? 'text-black' : isHomePage ? 'text-white' : 'text-black'
                 }`}
               aria-label="Toggle menu"
             >
@@ -105,10 +105,10 @@ const Header = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed inset-0 bg-white z-40 md:hidden transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+        className={`fixed inset-0 bg-white z-40 lg:hidden transition-all duration-300 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
           }`}
       >
-        <nav className="flex flex-col items-center justify-center h-full gap-8 text-2xl">
+        <nav className="flex flex-col items-center justify-center h-full gap-6 text-xl sm:text-2xl px-6 text-center">
           <Link
             to="/about"
             className="text-gray-900 hover:text-primary transition-colors font-medium"

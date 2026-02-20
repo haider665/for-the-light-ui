@@ -45,7 +45,7 @@ export default function PublicPrograms() {
         <main className="pt-24">
             <div className="container mx-auto px-4">
                 <section className="py-8">
-                    <div className="flex items-end justify-between gap-4 mb-6">
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
                         <div>
                             <h1 className="text-3xl font-semibold">Training Programs</h1>
                             <p className="text-gray-600">Join our upcoming workshops and training sessions</p>
@@ -75,7 +75,7 @@ export default function PublicPrograms() {
                                         {program.description}
                                     </p>
 
-                                    <div className="grid grid-cols-2 gap-3 mt-auto pt-4 border-t">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-auto pt-4 border-t">
                                         <Link
                                             to={`/programs/${program.id}`}
                                             className="px-4 py-2 rounded-md bg-gray-100 text-gray-900 text-center font-medium hover:bg-gray-200 transition"
