@@ -107,9 +107,14 @@ const Posts = () => {
         <div className="flex gap-6">
           <Sidebar />
           <section className="flex-1">
+            <div className="md:hidden mb-4 flex flex-wrap gap-2">
+              <Link to="/dashboard" className="px-3 py-2 rounded-md border border-gray-300">Dashboard</Link>
+              <Link to="/posts/new" className="px-3 py-2 rounded-md bg-gray-900 text-white">New Incident</Link>
+            </div>
+
             <div className="mb-4 flex flex-wrap gap-3 items-center">
               <h1 className="text-2xl font-semibold">All Posts</h1>
-              <div className="ml-auto flex gap-3">
+              <div className="md:ml-auto flex flex-wrap gap-3">
                 <button
                   onClick={fetchData}
                   className="px-3 py-2 rounded-md border"

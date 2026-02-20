@@ -42,14 +42,14 @@ const Contact = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="pt-32 pb-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="pt-28 md:pt-32 pb-16 md:pb-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <span className="inline-block text-sm font-semibold tracking-wider text-primary uppercase mb-4">
               Join Us
             </span>
-            <h1 className="text-5xl md:text-7xl font-bold mb-8">Get Involved</h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-8">Get Involved</h1>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed">
               Together, we can create a more sustainable and equitable future. Whether you want to
               volunteer, partner with us, or support our mission, we'd love to hear from you.
             </p>
@@ -58,15 +58,15 @@ const Contact = () => {
       </section>
 
       {/* Contact Form & Info */}
-      <section className="py-20 bg-white">
+      <section className="py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-16">
+            <div className="grid md:grid-cols-2 gap-10 md:gap-16">
               {/* Contact Information */}
-              <div className="space-y-12">
+              <div className="space-y-8 md:space-y-12">
                 <div>
-                  <h2 className="text-4xl font-bold mb-8">Let's Connect</h2>
-                  <p className="text-lg text-gray-600 leading-relaxed mb-8">
+                  <h2 className="text-2xl md:text-4xl font-bold mb-8">Let's Connect</h2>
+                  <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-8">
                     We're always excited to connect with people who share our vision for a
                     sustainable future. Reach out to us, and let's make a difference together.
                   </p>
@@ -146,8 +146,8 @@ const Contact = () => {
               </div>
 
               {/* Contact Form */}
-              <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-2 border-gray-100">
-                <h3 className="text-3xl font-bold mb-8">Send us a Message</h3>
+              <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-12 border-2 border-gray-100">
+                <h3 className="text-2xl md:text-3xl font-bold mb-8">Send us a Message</h3>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-semibold mb-2">
@@ -264,25 +264,25 @@ const Contact = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/10 to-primary/5">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-primary/10 to-primary/5">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-6">
               Ready to Make a Difference?
             </h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-8">
               Every action counts. Join us in building a sustainable future for Bangladesh.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="mailto:contact@forthelight.asia"
-                className="px-8 py-4 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
+                className="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
               >
                 Email Us Directly
               </a>
               <a
                 href="#"
-                className="px-8 py-4 bg-white text-primary rounded-xl font-bold hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl"
+                className="w-full sm:w-auto px-8 py-4 bg-white text-primary rounded-xl font-bold hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl"
               >
                 Download Our Brochure
               </a>

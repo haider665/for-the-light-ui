@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import Sidebar from '../components/dashboard/Sidebar'
+import { Link } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet'
 import { Icon, DivIcon } from 'leaflet' // added DivIcon
 import 'leaflet/dist/leaflet.css' // ensure Leaflet layout is correct
@@ -313,6 +314,11 @@ const CreatePost = () => {
         <div className="flex gap-6">
           <Sidebar />
           <div className="flex-1 min-w-0 bg-white rounded-2xl shadow-sm p-8">
+            <div className="md:hidden mb-4 flex flex-wrap gap-2">
+              <Link to="/dashboard" className="px-3 py-2 rounded-md border border-gray-300">Dashboard</Link>
+              <Link to="/posts" className="px-3 py-2 rounded-md border border-gray-300">All Incidents</Link>
+            </div>
+
             <h1 className="text-2xl font-bold mb-6">Create Post</h1>
 
             <div className="grid md:grid-cols-2 gap-8">
@@ -382,7 +388,7 @@ const CreatePost = () => {
                   {uploadError && <div className="mt-2 text-xs text-red-600">{uploadError}</div>}
                   {errors.images && <div className="mt-2 text-xs text-red-600">{errors.images}</div>}
                   {imageUrls.length > 0 && (
-                    <div className="mt-3 grid grid-cols-3 gap-3">
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                       {imageUrls.map((url, idx) => (
                         <div key={idx} className="border rounded-md p-2 text-xs text-gray-600">
                           <a href={url} target="_blank" rel="noreferrer" className="text-blue-600 break-all">Image URL</a>
@@ -394,7 +400,7 @@ const CreatePost = () => {
               </div>
 
               <div>
-                <div className="h-[420px] w-full rounded-md overflow-hidden border">
+                <div className="h-[300px] sm:h-[420px] w-full rounded-md overflow-hidden border">
                   <MapContainer
                     center={[center.lat, center.lng]}
                     zoom={8}

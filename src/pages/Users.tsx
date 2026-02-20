@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import Sidebar from '../components/dashboard/Sidebar'
 import api from '../config/api'
 import { Search, Check, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export type User = {
     id: number
@@ -127,6 +128,11 @@ const Users = () => {
                 <div className="flex gap-6">
                     <Sidebar />
                     <section className="flex-1">
+                        <div className="md:hidden mb-4 flex flex-wrap gap-2">
+                            <Link to="/dashboard" className="px-3 py-2 rounded-md border border-gray-300">Dashboard</Link>
+                            <Link to="/admin/programs" className="px-3 py-2 rounded-md border border-gray-300">Programs</Link>
+                        </div>
+
                         <div className="mb-4 flex flex-wrap gap-3 items-center justify-between">
                             <div>
                                 <h1 className="text-2xl font-semibold">User Management</h1>

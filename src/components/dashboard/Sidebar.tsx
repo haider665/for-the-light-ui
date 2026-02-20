@@ -12,7 +12,7 @@ const Sidebar = () => {
   const isSuperAdmin = user?.roles?.includes('SUPER_ADMIN')
 
   return (
-    <aside className="w-64 shrink-0 border-r bg-white h-[calc(100vh-96px)] sticky top-24">
+    <aside className="hidden md:block w-64 shrink-0 border-r bg-white h-[calc(100vh-96px)] sticky top-24">
       <div className="p-4">
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Incidents</h2>
         <nav className="mt-3 grid gap-1">

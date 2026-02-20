@@ -4,6 +4,7 @@ import Sidebar from '../components/dashboard/Sidebar'
 import ProgramList from '../components/program/ProgramList'
 import CreateProgram from '../components/program/CreateProgram'
 import { Program } from '../services/programService'
+import { Link } from 'react-router-dom'
 
 const Programs = () => {
     const { user } = useAuth()
@@ -46,8 +47,13 @@ const Programs = () => {
                         <Sidebar />
                     </div>
                     <section className="flex-1 min-h-[60vh]">
+                        <div className="md:hidden mb-4 flex flex-wrap gap-2">
+                            <Link to="/dashboard" className="px-3 py-2 rounded-md border border-gray-300">Dashboard</Link>
+                            <Link to="/users" className="px-3 py-2 rounded-md border border-gray-300">Users</Link>
+                        </div>
+
                         <div className="max-w-4xl mx-auto space-y-8">
-                            <div className="flex justify-between items-center mb-6">
+                            <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
                                 <div>
                                     <h1 className="text-2xl font-bold">Program Management</h1>
                                     <p className="text-gray-600">Manage training programs and workshops</p>
