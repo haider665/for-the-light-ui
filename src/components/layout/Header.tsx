@@ -67,7 +67,7 @@ const Header = () => {
                 Knowledge Hub
               </Link>
               <Link to="/incidents" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
-                Incidents
+                Community Watch
               </Link>
               <Link to="/programs" className={`transition-colors ${isScrolled ? 'text-black hover:text-primary' : isHomePage ? 'text-white hover:text-gray-200' : 'text-black hover:text-primary'}`}>
                 Programs

@@ -49,25 +49,38 @@ function fmtDate(iso?: string) {
   }).format(d)
 }
 
+const statusStyles: Record<string, string> = {
+  DRAFT: 'bg-slate-100 text-slate-600',
+  SUBMITTED: 'bg-teal-100 text-teal-800',
+  NEW: 'bg-blue-100 text-blue-800',
+  PENDING_FOR_APPROVAL: 'bg-amber-100 text-amber-800',
+  SERVICE_REQUESTED: 'bg-purple-100 text-purple-800',
+  PENDING: 'bg-orange-100 text-orange-800',
+  IN_PROGRESS: 'bg-yellow-100 text-yellow-800',
+  RESOLVED: 'bg-green-100 text-green-800',
+  REJECTED: 'bg-red-100 text-red-800',
+  CLOSED: 'bg-gray-200 text-gray-700',
+}
+
 const StatusPill = ({ status }: { status: string }) => {
-  const color = status === 'PENDING' ? 'bg-yellow-100 text-yellow-800'
-    : status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800'
-      : status === 'RESOLVED' ? 'bg-green-100 text-green-800'
-        : 'bg-gray-100 text-gray-800'
+  const color = statusStyles[status] ?? 'bg-gray-100 text-gray-800'
   return <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${color}`}>{status}</span>
 }
+
+const ALL_STATUSES = ['SERVICE_REQUESTED', 'IN_PROGRESS', 'RESOLVED']
 
 export default function Incidents() {
   const [items, setItems] = useState<Incident[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [selectedStatus, setSelectedStatus] = useState<string>('')
 
   useEffect(() => {
     const run = async () => {
       setLoading(true)
       setError(null)
       try {
-        const res = await api.get('/incident/all')
+        const res = await api.get('/incident/available')
         setItems(res.data)
       } catch (e: any) {
         setError(e?.message || 'Something went wrong')
@@ -89,6 +102,11 @@ export default function Incidents() {
     })
   }, [items])
 
+  const filteredCards = useMemo(() => {
+    if (!selectedStatus) return cards
+    return cards.filter(c => c.status === selectedStatus)
+  }, [cards, selectedStatus])
+
   return (
     <main className="pt-24">
       <div className="container mx-auto px-4">
@@ -102,11 +120,36 @@ export default function Incidents() {
               {loading ? 'Loading…' : 'Refresh'}
             </button>
           </div>
+          {/* Status filter pills */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            <button
+              onClick={() => setSelectedStatus('')}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                selectedStatus === '' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              All
+            </button>
+            {ALL_STATUSES.map(s => (
+              <button
+                key={s}
+                onClick={() => setSelectedStatus(prev => prev === s ? '' : s)}
+                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  selectedStatus === s
+                    ? `${statusStyles[s]} ring-2 ring-offset-1 ring-current`
+                    : `${statusStyles[s]} opacity-70 hover:opacity-100`
+                }`}
+              >
+                {s.replace(/_/g, ' ')}
+              </button>
+            ))}
+          </div>
+
           {error && (
             <div className="mb-4 p-3 rounded-md bg-red-50 text-red-700 text-sm">{error}</div>
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cards.map(card => (
+            {filteredCards.map(card => (
               <Link key={card.id} to={`/incidents/${card.id}`} className="block">
                 <Card className="overflow-hidden p-0">
                   <div className="aspect-video bg-gray-100 overflow-hidden">
@@ -125,8 +168,10 @@ export default function Incidents() {
                 </Card>
               </Link>
             ))}
-            {!loading && !error && cards.length === 0 && (
-              <div className="col-span-full text-center text-gray-600">No incidents yet.</div>
+            {!loading && !error && filteredCards.length === 0 && (
+              <div className="col-span-full text-center text-gray-600">
+                {selectedStatus ? `No incidents with status "${selectedStatus.replace(/_/g, ' ')}".` : 'No incidents yet.'}
+              </div>
             )}
           </div>
         </section>

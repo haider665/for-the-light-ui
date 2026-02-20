@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { FilePlus, List, Users as UsersIcon, Calendar } from 'lucide-react'
+import { FilePlus, List, Users as UsersIcon, Calendar, AlertTriangle } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const Sidebar = () => {
@@ -37,6 +37,10 @@ const Sidebar = () => {
               <Link to="/admin/programs" className={`${itemBase} ${pathname === '/admin/programs' ? active : inactive}`}>
                 <Calendar size={18} />
                 <span>Program Management</span>
+              </Link>
+              <Link to="/admin/incidents" className={`${itemBase} ${pathname === '/admin/incidents' ? active : inactive}`}>
+                <AlertTriangle size={18} />
+                <span>Incident Management</span>
               </Link>
             </nav>
           </>
