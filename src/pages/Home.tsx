@@ -131,41 +131,52 @@ const Home = () => {
             <span className="inline-block text-sm font-semibold tracking-wider text-primary uppercase mb-4">Trusted By</span>
             <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold">Our Partners</h2>
           </div>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 max-w-7xl mx-auto">
-            <div className="grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100">
-              <img 
-                src="/images/logos/Bridge-for-Billions-logo.png" 
-                alt="Bridge for Billions" 
-                className="h-24 sm:h-32 md:h-40 lg:h-48 w-auto object-contain"
-              />
-            </div>
-            <div className="grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100">
-              <img 
-                src="/images/logos/Dhumketu logo.png" 
-                alt="Dhumketu" 
-                className="h-24 sm:h-32 md:h-40 lg:h-48 w-auto object-contain"
-              />
-            </div>
-            <div className="grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100">
-              <img 
-                src="/images/logos/UK_International_logo.png" 
-                alt="UK International" 
-                className="h-24 sm:h-32 md:h-40 lg:h-48 w-auto object-contain"
-              />
-            </div>
-            <div className="grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100">
-              <img 
-                src="/images/logos/earth logo.png" 
-                alt="Earth" 
-                className="h-24 sm:h-32 md:h-40 lg:h-48 w-auto object-contain"
-              />
-            </div>
-            <div className="grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100">
-              <img 
-                src="/images/logos/kingdom-of-the-netherlands-logo.png" 
-                alt="Kingdom of the Netherlands" 
-                className="h-24 sm:h-32 md:h-40 lg:h-48 w-auto object-contain"
-              />
+          {/* Infinite marquee strip */}
+          <div className="overflow-hidden relative">
+            {/* fade edges */}
+            <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+
+            <div className="flex animate-marquee gap-16 md:gap-24 w-max">
+              {[
+                { src: '/images/partners/541356213_1366037542113871_7082279413502100796_n.jpg', alt: 'Partner' },
+                { src: '/images/partners/ActionAid_logo.png', alt: 'ActionAid' },
+                { src: '/images/partners/AL Logo Transparent.png', alt: 'AL' },
+                { src: '/images/partners/bridge for billions.png', alt: 'Bridge for Billions' },
+                { src: '/images/partners/CIVICUS Transparent.png', alt: 'CIVICUS' },
+                { src: '/images/partners/create the future.png', alt: 'Create The Future' },
+                { src: '/images/partners/DDI South Asia (Transparent).png', alt: 'DDI South Asia' },
+                { src: '/images/partners/DDI Transparent.png', alt: 'DDI' },
+                { src: '/images/partners/eco leaders.png', alt: 'Eco Leaders' },
+                { src: '/images/partners/ide-powering-entrepreneurs-to-end-poverty.svg', alt: 'IDE' },
+                { src: '/images/partners/Logo_JCI.png', alt: 'JCI' },
+                { src: '/images/partners/manusher-jonno-foundation-seeklogo.png', alt: 'Manusher Jonno Foundation' },
+                { src: '/images/partners/p5-sglogo-landscape2.png', alt: 'P5' },
+                { src: '/images/partners/RestorationFactory-logo.png', alt: 'Restoration Factory' },
+                { src: '/images/partners/TheAsiaFoundation_Logo_PlumHZ.svg', alt: 'The Asia Foundation' },
+                { src: '/images/partners/UNEP - Transparent_1.png', alt: 'UNEP' },
+                /* duplicate for seamless loop */
+                { src: '/images/partners/541356213_1366037542113871_7082279413502100796_n.jpg', alt: 'Partner' },
+                { src: '/images/partners/ActionAid_logo.png', alt: 'ActionAid' },
+                { src: '/images/partners/bridge for billions.png', alt: 'Bridge for Billions' },
+                { src: '/images/partners/CIVICUS Transparent.png', alt: 'CIVICUS' },
+                { src: '/images/partners/AL Logo Transparent.png', alt: 'AL' },
+                { src: '/images/partners/DDI South Asia (Transparent).png', alt: 'DDI South Asia' },
+                { src: '/images/partners/DDI Transparent.png', alt: 'DDI' },
+                { src: '/images/partners/create the future.png', alt: 'Create The Future' },
+                { src: '/images/partners/eco leaders.png', alt: 'Eco Leaders' },
+                { src: '/images/partners/ide-powering-entrepreneurs-to-end-poverty.svg', alt: 'IDE' },
+                { src: '/images/partners/Logo_JCI.png', alt: 'JCI' },
+                { src: '/images/partners/manusher-jonno-foundation-seeklogo.png', alt: 'Manusher Jonno Foundation' },
+                { src: '/images/partners/p5-sglogo-landscape2.png', alt: 'P5' },
+                { src: '/images/partners/RestorationFactory-logo.png', alt: 'Restoration Factory' },
+                { src: '/images/partners/TheAsiaFoundation_Logo_PlumHZ.svg', alt: 'The Asia Foundation' },
+                { src: '/images/partners/UNEP - Transparent_1.png', alt: 'UNEP' },
+              ].map(({ src, alt }, i) => (
+                <div key={`${src}-${i}`} className="flex-shrink-0 flex items-center grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300">
+                  <img src={src} alt={alt} className="h-12 md:h-16 w-auto max-w-[140px] object-contain" />
+                </div>
+              ))}
             </div>
           </div>
         </div>
