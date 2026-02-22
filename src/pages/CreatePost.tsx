@@ -137,6 +137,7 @@ const CreatePost = () => {
   const [marker, setMarker] = useState<LatLng | null>(null)
   const [center, setCenter] = useState<LatLng>({ lat: 23.685, lng: 90.3563 }) // Bangladesh approx
   const [imageUrls, setImageUrls] = useState<string[]>([])
+  const [videoUrl, setVideoUrl] = useState('')
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [errors, setErrors] = useState<{
@@ -187,6 +188,7 @@ const CreatePost = () => {
           }
         }
         if (inc.images?.length) setImageUrls(inc.images)
+        if (inc.videoUrl) setVideoUrl(inc.videoUrl)
       } catch (e: any) {
         setSubmitResult({ status: 'failed', message: e?.message || 'Failed to load incident.' })
       } finally {
@@ -316,6 +318,7 @@ const CreatePost = () => {
   const payload = useMemo(() => ({
     title,
     description,
+    videoUrl: videoUrl.trim() || null,
     location: {
       division: divisionCode || null,
       district: districtCode || null,
@@ -324,7 +327,7 @@ const CreatePost = () => {
       lng: marker?.lng ?? null,
     },
     images: imageUrls, // use cloud URLs instead of raw file metadata
-  }), [title, description, divisionCode, districtCode, upazilaCode, marker, imageUrls])
+  }), [title, description, videoUrl, divisionCode, districtCode, upazilaCode, marker, imageUrls])
 
   return (
     <section className="pt-28 pb-16 bg-gray-50 min-h-screen">
@@ -436,6 +439,18 @@ const CreatePost = () => {
                       ))}
                     </div>
                   )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">Video URL <span className="text-gray-400 font-normal">(optional)</span></label>
+                  <input
+                    type="url"
+                    value={videoUrl}
+                    onChange={e => setVideoUrl(e.target.value)}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    className="w-full border rounded-md px-3 py-2 text-sm"
+                  />
+                  <p className="mt-1 text-xs text-gray-400">Paste a YouTube link or any direct video URL.</p>
                 </div>
               </div>
 

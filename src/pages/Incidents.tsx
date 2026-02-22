@@ -113,8 +113,8 @@ export default function Incidents() {
         <section className="py-8">
           <div className="flex items-end justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl font-semibold">All Incidents</h1>
-              <p className="text-gray-600">Public feed of reported incidents</p>
+              <h1 className="text-3xl font-semibold">Your Community Watchdog</h1>
+              <p className="text-gray-600">Public feed of reported service requests</p>
             </div>
             <button onClick={() => window.location.reload()} className="px-3 py-2 rounded-md border" disabled={loading}>
               {loading ? 'Loading…' : 'Refresh'}
