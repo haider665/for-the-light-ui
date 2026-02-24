@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Card from '../components/ui/Card'
 import { Link } from 'react-router-dom'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { divisions, districts, upazilas } from '../data/bdLocations'
 import api from '../config/api'
 
@@ -74,6 +75,8 @@ export default function Incidents() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [selectedStatus, setSelectedStatus] = useState<string>('')
+  const [page, setPage] = useState(1)
+  const PAGE_SIZE = 9
 
   useEffect(() => {
     const run = async () => {
@@ -92,20 +95,29 @@ export default function Incidents() {
   }, [])
 
   const cards = useMemo(() => {
-    return items.map(it => {
-      const upazilaName = it.location?.upazila || codeToUpazilaName(it.location?.upazilaCode)
-      const districtName = it.location?.district || codeToDistrictName(it.location?.districtCode)
-      const divisionName = it.location?.division || codeToDivisionName(it.location?.divisionCode)
-      const location = [upazilaName, districtName, divisionName].filter(Boolean).join(', ')
-      const image = it.images?.[0] || '/images/temp/test.png'
-      return { ...it, location, image }
-    })
+    return [...items]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .map(it => {
+        const upazilaName = it.location?.upazila || codeToUpazilaName(it.location?.upazilaCode)
+        const districtName = it.location?.district || codeToDistrictName(it.location?.districtCode)
+        const divisionName = it.location?.division || codeToDivisionName(it.location?.divisionCode)
+        const location = [upazilaName, districtName, divisionName].filter(Boolean).join(', ')
+        const image = it.images?.[0] || '/images/temp/test.png'
+        return { ...it, location, image }
+      })
   }, [items])
 
   const filteredCards = useMemo(() => {
+    setPage(1)
     if (!selectedStatus) return cards
     return cards.filter(c => c.status === selectedStatus)
   }, [cards, selectedStatus])
+
+  const totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE))
+  const pagedCards = useMemo(
+    () => filteredCards.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [filteredCards, page]
+  )
 
   return (
     <main className="pt-24">
@@ -149,7 +161,7 @@ export default function Incidents() {
             <div className="mb-4 p-3 rounded-md bg-red-50 text-red-700 text-sm">{error}</div>
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCards.map(card => (
+            {pagedCards.map(card => (
               <Link key={card.id} to={`/incidents/${card.id}`} className="block">
                 <Card className="overflow-hidden p-0">
                   <div className="aspect-video bg-gray-100 overflow-hidden">
@@ -174,6 +186,43 @@ export default function Incidents() {
               </div>
             )}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-10">
+              <button
+                onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                disabled={page === 1}
+                className="p-2 rounded-md border disabled:opacity-40 hover:bg-gray-100 transition-colors"
+                aria-label="Previous page"
+              >
+                <ChevronLeft size={18} />
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                <button
+                  key={p}
+                  onClick={() => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                  className={`w-9 h-9 rounded-md text-sm font-medium transition-colors ${
+                    p === page
+                      ? 'bg-gray-800 text-white'
+                      : 'border hover:bg-gray-100 text-gray-700'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+
+              <button
+                onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
+                disabled={page === totalPages}
+                className="p-2 rounded-md border disabled:opacity-40 hover:bg-gray-100 transition-colors"
+                aria-label="Next page"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          )}
         </section>
       </div>
     </main>
