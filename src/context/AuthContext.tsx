@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, ReactNode, useCallback } from 'react'
-import { API_BASE_URL } from '../config/api'
+import api, { API_BASE_URL } from '../config/api'
 
 type User = {
   name?: string
@@ -17,17 +17,10 @@ type AuthContextValue = {
   loading: boolean
   login: () => void
   logout: () => Promise<void>
+  authenticate: (token: string) => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined)
-
-function getCookie(name: string): string | undefined {
-  const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'))
-  return match ? match[1] : undefined
-}
-
-
-const base = (path: string) => `${API_BASE_URL}${path}`
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -37,21 +30,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let cancelled = false
     const fetchUser = async () => {
       try {
-        // Fetch CSRF token first to ensure the cookie is set
-        await fetch(base('/csrf'), { credentials: 'include' })
+        const token = localStorage.getItem('accessToken')
+        if (!token) {
+          setLoading(false)
+          return
+        }
 
-        // Then fetch user details
-        const res = await fetch(base('/user/details'), { credentials: 'include' })
+        const res = await api.get('/user/details')
         if (!cancelled) {
-          if (res.ok) {
-            const data = await res.json()
-            setUser(data)
-          } else {
-            setUser(null)
-          }
+          setUser(res.data)
         }
       } catch (e) {
-        if (!cancelled) setUser(null)
+        if (!cancelled) {
+          setUser(null)
+          localStorage.removeItem('accessToken')
+        }
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -64,42 +57,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  // const login = useCallback(() => {
+  //   window.location.href = `${API_BASE_URL}/oauth2/authorization/google`
+  // }, [])
+
   const login = useCallback(() => {
-    window.location.href = base('/oauth2/authorization/google')
+    // OLD: window.location.href = `${API_BASE_URL}/oauth2/authorization/google`
+    // NEW: Should match .baseUri("/oauth2/authorize") + /google
+    // We need to point to the BACKEND for the initial handshake, but the redirect_uri param 
+    // tells Google where to send the user back.
+    // Since we removed the /oauth2 proxy, we must use the full backend URL for the start.
+    window.location.href = `${API_BASE_URL}/oauth2/authorize/google?redirect_uri=${window.location.origin}/oauth2/redirect`
   }, [])
 
   const logout = useCallback(async () => {
+    localStorage.removeItem('accessToken')
+    setUser(null)
+    window.location.href = '/' // or navigate('/login') if we had access to navigate here. 
+    // Since AuthProvider wraps Router, we can't use useNavigate here unless we split the context.
+    // But forcing a reload with window.location is acceptable for logout.
+    // Or we could return a promise and let the caller handle navigation.
+    // For now, simple client-side logout.
+  }, [])
+
+  const authenticate = useCallback(async (token: string) => {
+    localStorage.setItem('accessToken', token)
+    setLoading(true)
     try {
-      const csrfToken = getCookie('XSRF-TOKEN')
-
-      if (!csrfToken) {
-        console.error('No CSRF token found')
-        setUser(null)
-        return
-      }
-
-      const response = await fetch(base('/logout'), {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-XSRF-TOKEN': csrfToken,
-        },
-      })
-
-      if (!response.ok) {
-        console.error('Logout failed:', response.status)
-      }
-    } catch (e) {
-      console.error('Logout error:', e)
-    } finally {
+      const res = await api.get('/user/details')
+      setUser(res.data)
+    } catch (e: any) {
       setUser(null)
+      localStorage.removeItem('accessToken')
+      throw e
+    } finally {
+      setLoading(false)
     }
   }, [])
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, loading, login, logout }),
-    [user, loading, login, logout]
+    () => ({ user, loading, login, logout, authenticate }),
+    [user, loading, login, logout, authenticate]
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

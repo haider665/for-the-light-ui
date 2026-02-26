@@ -68,12 +68,12 @@ const Impact = () => {
   }
   return (
     <>
-      <section className="py-32 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-20 md:py-32 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto text-center mb-20">
+          <div className="max-w-5xl mx-auto text-center mb-14 md:mb-20">
             <span className="inline-block text-sm font-semibold tracking-wider text-primary uppercase mb-4">Making a Difference</span>
-            <h1 className="text-5xl md:text-7xl font-bold mb-8">Our Impact</h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold mb-8">Our Impact</h1>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed">
               At For The Light, we're committed to creating a sustainable and equitable future for
               women in Bangladesh. Our innovative approach combines green technology with a
               women-led economic model, empowering communities and driving positive change.
@@ -81,12 +81,12 @@ const Impact = () => {
           </div>
 
           {/* The Model */}
-          <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-3xl p-12 mb-32 max-w-6xl mx-auto shadow-lg">
+          <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-3xl p-6 sm:p-8 md:p-12 mb-20 md:mb-32 max-w-6xl mx-auto shadow-lg">
             <div className="inline-block px-4 py-2 bg-white rounded-full mb-6">
               <span className="text-sm font-semibold text-primary">Our Model</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-8">The Model</h2>
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-8">The Model</h2>
+            <p className="text-base md:text-lg text-gray-700 leading-relaxed">
               Our model centers on a women-led green economy, where women entrepreneurs are at the
               forefront of deploying and maintaining life-saving green technologies. This approach
               not only provides access to clean energy and water but also creates economic
@@ -95,7 +95,7 @@ const Impact = () => {
           </div>
 
           {/* Impact Metrics Dashboard
-          <div className="mb-32">
+          <div className="mb-20 md:mb-32">
             <div className="text-center mb-16">
               <span className="inline-block text-sm font-semibold tracking-wider text-primary uppercase mb-4">By The Numbers</span>
               <h2 className="text-4xl md:text-5xl font-bold">Impact Metrics Dashboard</h2>
@@ -111,8 +111,8 @@ const Impact = () => {
           <div className="mb-32">
             <div className="text-center mb-16">
               <span className="inline-block text-sm font-semibold tracking-wider text-primary uppercase mb-4">Visual Stories</span>
-              <h2 className="text-4xl md:text-5xl font-bold">Impact Gallery</h2>
-              <p className="text-xl text-gray-600 mt-6">Witness the transformation in our communities</p>
+              <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold">Impact Gallery</h2>
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 mt-6">Witness the transformation in our communities</p>
             </div>
             
             <div className="max-w-6xl mx-auto relative">
@@ -127,8 +127,8 @@ const Impact = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                   
                   {/* Caption */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
-                    <p className="text-white text-2xl md:text-3xl font-bold leading-tight">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-12">
+                    <p className="text-white text-lg sm:text-xl md:text-3xl font-bold leading-tight">
                       {impactImages[currentSlide].caption}
                     </p>
                     <p className="text-white/80 mt-2">
@@ -140,14 +140,14 @@ const Impact = () => {
                 {/* Navigation Arrows */}
                 <button
                   onClick={prevSlide}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 group"
+                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 group"
                   aria-label="Previous slide"
                 >
                   <ChevronLeft className="text-gray-800 group-hover:text-primary transition-colors" size={28} />
                 </button>
                 <button
                   onClick={nextSlide}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 group"
+                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 group"
                   aria-label="Next slide"
                 >
                   <ChevronRight className="text-gray-800 group-hover:text-primary transition-colors" size={28} />
@@ -155,12 +155,12 @@ const Impact = () => {
               </div>
 
               {/* Thumbnail Navigation */}
-              <div className="flex gap-3 mt-8 overflow-x-auto pb-4 scrollbar-hide justify-center">
+              <div className="flex gap-3 mt-8 overflow-x-auto pb-4 scrollbar-hide md:justify-center">
                 {impactImages.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
-                    className={`flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden transition-all duration-300 ${
+                    className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-xl overflow-hidden transition-all duration-300 ${
                       currentSlide === index
                         ? 'ring-4 ring-primary scale-105 shadow-lg'
                         : 'opacity-60 hover:opacity-100 hover:scale-105'

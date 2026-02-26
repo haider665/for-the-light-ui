@@ -81,7 +81,7 @@ const Contact = () => {
                     <div>
                       <h3 className="font-bold text-lg mb-1">Email Us</h3>
                       <a
-                        href="mailto:contact@forthelight.asia"
+                        href="mailto:alamin@forthelight.asia"
                         className="text-gray-600 hover:text-primary transition-colors"
                       >
                         contact@forthelight.asia
@@ -275,17 +275,17 @@ const Contact = () => {
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <a
-                href="mailto:contact@forthelight.asia"
+                href="mailto:alamin@forthelight.asia"
                 className="px-8 py-4 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl"
               >
                 Email Us Directly
               </a>
-              <a
+              {/* <a
                 href="#"
                 className="px-8 py-4 bg-white text-primary rounded-xl font-bold hover:bg-gray-50 transition-all shadow-lg hover:shadow-xl"
               >
                 Download Our Brochure
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

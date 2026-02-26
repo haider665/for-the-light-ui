@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import Sidebar from '../components/dashboard/Sidebar'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet'
 import { Icon, DivIcon } from 'leaflet' // added DivIcon
 import 'leaflet/dist/leaflet.css' // ensure Leaflet layout is correct
@@ -105,24 +106,28 @@ const BD_DATA = {
 }
 
 // API base URL from shared config
-import { API_BASE_URL } from '../config/api'
+import api, { API_BASE_URL } from '../config/api'
 
 // Read cookie without decoding (Spring expects raw value)
-function getCookie(name: string): string | undefined {
-  const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'))
-  return match ? match[1] : undefined
-}
+// function getCookie(name: string): string | undefined {
+//   const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'))
+//   return match ? match[1] : undefined
+// }
 
 // Ensure CSRF cookie is present, then return token
-async function ensureCsrf(): Promise<string> {
-  try {
-    await fetch(`${API_BASE_URL}/csrf`, { credentials: 'include' })
-  } catch {}
-  return getCookie('XSRF-TOKEN') || ''
-}
+// async function ensureCsrf(): Promise<string> {
+//   try {
+//     await fetch(`${API_BASE_URL}/csrf`, { credentials: 'include' })
+//   } catch { }
+//   return getCookie('XSRF-TOKEN') || ''
+// }
 
 const CreatePost = () => {
   useAuth() // ensures provider is loaded; ProtectedRoute gates access
+  const { id } = useParams<{ id?: string }>()
+  const navigate = useNavigate()
+  const isEditMode = Boolean(id)
+  const [loadingIncident, setLoadingIncident] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [divisionCode, setDivisionCode] = useState('')
@@ -132,6 +137,7 @@ const CreatePost = () => {
   const [marker, setMarker] = useState<LatLng | null>(null)
   const [center, setCenter] = useState<LatLng>({ lat: 23.685, lng: 90.3563 }) // Bangladesh approx
   const [imageUrls, setImageUrls] = useState<string[]>([])
+  const [videoUrl, setVideoUrl] = useState('')
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [errors, setErrors] = useState<{
@@ -157,10 +163,40 @@ const CreatePost = () => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         pos => setCenter({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        () => {}
+        () => { }
       )
     }
   }, [])
+
+  useEffect(() => {
+    if (!id) return
+    const fetchIncident = async () => {
+      setLoadingIncident(true)
+      try {
+        const res = await api.get(`/incident/all/${id}`)
+        const inc = res.data
+        setTitle(inc.title || '')
+        setDescription(inc.description || '')
+        if (inc.location) {
+          setDivisionCode(inc.location.division || '')
+          setDistrictCode(inc.location.district || '')
+          setUpazilaCode(inc.location.upazila || '')
+          if (inc.location.lat != null && inc.location.lng != null) {
+            const pos = { lat: inc.location.lat, lng: inc.location.lng }
+            setMarker(pos)
+            setCenter(pos)
+          }
+        }
+        if (inc.images?.length) setImageUrls(inc.images)
+        if (inc.videoUrl) setVideoUrl(inc.videoUrl)
+      } catch (e: any) {
+        setSubmitResult({ status: 'failed', message: e?.message || 'Failed to load incident.' })
+      } finally {
+        setLoadingIncident(false)
+      }
+    }
+    fetchIncident()
+  }, [id])
 
   const filteredDistricts = useMemo(() => {
     const div = BD_DATA.divisions.find(d => d.name === divisionCode)
@@ -193,7 +229,7 @@ const CreatePost = () => {
         fd.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
         fd.append('folder', CLOUDINARY_FOLDER)
         const baseName = file.name.replace(/\.[^/.]+$/, '')
-        const publicId = `${baseName}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`
+        const publicId = `${baseName}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
         fd.append('public_id', publicId)
 
         const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, { method: 'POST', body: fd })
@@ -258,24 +294,20 @@ const CreatePost = () => {
     if (!validate()) return
     setSubmitting(true)
     try {
-      const csrfToken = await ensureCsrf()
-      const res = await fetch(`${API_BASE_URL}/incident`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-XSRF-TOKEN': csrfToken, // send CSRF token
-        },
-        credentials: 'include', // include cookies/session
-        body: JSON.stringify(payload),
-      })
-      if (res.status === 401 || res.status === 302) {
+      if (isEditMode) {
+        await api.post(`/incident/${id}`, payload)
+        setSubmitResult({ status: 'success', message: 'Incident updated successfully.' })
+        setTimeout(() => navigate('/posts'), 1200)
+      } else {
+        const res = await api.post('/incident', payload)
+        const status = res.status === 200 || res.status === 201 ? 'success' : (res.data.status ?? 'failed')
+        const message = res.data.message ?? 'Incident created successfully.'
+        setSubmitResult({ status, message })
+      }
+    } catch (e: any) {
+      if (e.response && (e.response.status === 401 || e.response.status === 302)) {
         setNeedsAuth(true)
       }
-      const data = await res.json().catch(() => ({}))
-      const status = res.ok ? 'success' : (data.status ?? 'failed')
-      const message = data.message ?? (res.ok ? 'Incident created successfully.' : 'Failed to create incident.')
-      setSubmitResult({ status, message })
-    } catch {
       setSubmitResult({ status: 'failed', message: 'Network/CORS error. Please try again.' })
     } finally {
       setSubmitting(false)
@@ -286,6 +318,7 @@ const CreatePost = () => {
   const payload = useMemo(() => ({
     title,
     description,
+    videoUrl: videoUrl.trim() || null,
     location: {
       division: divisionCode || null,
       district: districtCode || null,
@@ -294,7 +327,7 @@ const CreatePost = () => {
       lng: marker?.lng ?? null,
     },
     images: imageUrls, // use cloud URLs instead of raw file metadata
-  }), [title, description, divisionCode, districtCode, upazilaCode, marker, imageUrls])
+  }), [title, description, videoUrl, divisionCode, districtCode, upazilaCode, marker, imageUrls])
 
   return (
     <section className="pt-28 pb-16 bg-gray-50 min-h-screen">
@@ -320,144 +353,171 @@ const CreatePost = () => {
       <div className="container mx-auto px-4">
         <div className="flex gap-6">
           <Sidebar />
-          <div className="flex-1 bg-white rounded-2xl shadow-sm p-8">
-          <h1 className="text-2xl font-bold mb-6">Create Post</h1>
+          <div className="flex-1 min-w-0 bg-white rounded-2xl shadow-sm p-8">
+            <div className="md:hidden mb-4 flex flex-wrap gap-2">
+              <Link to="/dashboard" className="px-3 py-2 rounded-md border border-gray-300">Dashboard</Link>
+              <Link to="/posts" className="px-3 py-2 rounded-md border border-gray-300">All Incidents</Link>
+            </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Title</label>
-                <input
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                  maxLength={TITLE_MAX}
-                  className="w-full border rounded-md px-3 py-2"
-                />
-                <div className="mt-1 text-xs text-gray-500">{title.trim().length}/{TITLE_MAX}</div>
-                {errors.title && <div className="mt-1 text-xs text-red-600">{errors.title}</div>}
-              </div>
+            <h1 className="text-2xl font-bold mb-6">{isEditMode ? 'Edit Incident' : 'Create Incident'}</h1>
+            {loadingIncident && (
+              <div className="mb-4 text-sm text-gray-500 animate-pulse">Loading incident data…</div>
+            )}
 
-              <div>
-                <label className="block text-sm font-medium mb-1">Description</label>
-                <textarea
-                  value={description}
-                  onChange={e => setDescription(e.target.value)}
-                  rows={6}
-                  maxLength={DESC_MAX}
-                  className="w-full border rounded-md px-3 py-2"
-                />
-                <div className="mt-1 text-xs text-gray-500">{description.trim().length}/{DESC_MAX}</div>
-                {errors.description && <div className="mt-1 text-xs text-red-600">{errors.description}</div>}
-              </div>
-
-              <div className="grid grid-cols-1 gap-4">
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Division</label>
-                  <select value={divisionCode} onChange={e => { setDivisionCode(e.target.value); setDistrictCode(''); setUpazilaCode('') }} className="w-full border rounded-md px-3 py-2">
-                    <option value="">Select Division</option>
-                    {BD_DATA.divisions.map(div => (
-                      <option key={div.name} value={div.name}>{div.name}</option>
-                    ))}
-                  </select>
-                  {errors.division && <div className="mt-1 text-xs text-red-600">{errors.division}</div>}
+                  <label className="block text-sm font-medium mb-1">Title</label>
+                  <input
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                    maxLength={TITLE_MAX}
+                    className="w-full border rounded-md px-3 py-2"
+                  />
+                  <div className="mt-1 text-xs text-gray-500">{title.trim().length}/{TITLE_MAX}</div>
+                  {errors.title && <div className="mt-1 text-xs text-red-600">{errors.title}</div>}
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">District</label>
-                  <select value={districtCode} onChange={e => { setDistrictCode(e.target.value); setUpazilaCode('') }} className="w-full border rounded-md px-3 py-2" disabled={!divisionCode}>
-                    <option value="">Select District</option>
-                    {filteredDistricts.map(name => (
-                      <option key={name} value={name}>{name}</option>
-                    ))}
-                  </select>
-                  {errors.district && <div className="mt-1 text-xs text-red-600">{errors.district}</div>}
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Upazila</label>
-                  <select value={upazilaCode} onChange={e => setUpazilaCode(e.target.value)} className="w-full border rounded-md px-3 py-2" disabled={!districtCode}>
-                    <option value="">Select Upazila</option>
-                    {filteredUpazilas.map(name => (
-                      <option key={name} value={name}>{name}</option>
-                    ))}
-                  </select>
-                  {errors.upazila && <div className="mt-1 text-xs text-red-600">{errors.upazila}</div>}
-                </div>
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-1">Images</label>
-                <input type="file" accept="image/*" multiple onChange={onFilesChange} />
-                {uploading && <div className="mt-2 text-xs text-blue-600">Uploading...</div>}
-                {uploadError && <div className="mt-2 text-xs text-red-600">{uploadError}</div>}
-                {errors.images && <div className="mt-2 text-xs text-red-600">{errors.images}</div>}
-                {imageUrls.length > 0 && (
-                  <div className="mt-3 grid grid-cols-3 gap-3">
-                    {imageUrls.map((url, idx) => (
-                      <div key={idx} className="border rounded-md p-2 text-xs text-gray-600">
-                        <a href={url} target="_blank" rel="noreferrer" className="text-blue-600 break-all">Image URL</a>
-                      </div>
-                    ))}
+                <div>
+                  <label className="block text-sm font-medium mb-1">Description</label>
+                  <textarea
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                    rows={6}
+                    maxLength={DESC_MAX}
+                    className="w-full border rounded-md px-3 py-2 resize-y"
+                  />
+                  <div className="mt-1 text-xs text-gray-500">{description.trim().length}/{DESC_MAX}</div>
+                  {errors.description && <div className="mt-1 text-xs text-red-600">{errors.description}</div>}
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Division</label>
+                    <select value={divisionCode} onChange={e => { setDivisionCode(e.target.value); setDistrictCode(''); setUpazilaCode('') }} className="w-full border rounded-md px-3 py-2">
+                      <option value="">Select Division</option>
+                      {BD_DATA.divisions.map(div => (
+                        <option key={div.name} value={div.name}>{div.name}</option>
+                      ))}
+                    </select>
+                    {errors.division && <div className="mt-1 text-xs text-red-600">{errors.division}</div>}
                   </div>
-                )}
-              </div>
-            </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">District</label>
+                    <select value={districtCode} onChange={e => { setDistrictCode(e.target.value); setUpazilaCode('') }} className="w-full border rounded-md px-3 py-2" disabled={!divisionCode}>
+                      <option value="">Select District</option>
+                      {filteredDistricts.map(name => (
+                        <option key={name} value={name}>{name}</option>
+                      ))}
+                    </select>
+                    {errors.district && <div className="mt-1 text-xs text-red-600">{errors.district}</div>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Upazila</label>
+                    <select value={upazilaCode} onChange={e => setUpazilaCode(e.target.value)} className="w-full border rounded-md px-3 py-2" disabled={!districtCode}>
+                      <option value="">Select Upazila</option>
+                      {filteredUpazilas.map(name => (
+                        <option key={name} value={name}>{name}</option>
+                      ))}
+                    </select>
+                    {errors.upazila && <div className="mt-1 text-xs text-red-600">{errors.upazila}</div>}
+                  </div>
+                </div>
 
-            <div>
-              <div className="h-[420px] w-full rounded-md overflow-hidden border">
-                <MapContainer
-                  center={[center.lat, center.lng]}
-                  zoom={8}
-                  minZoom={6}
-                  maxZoom={18}
-                  preferCanvas={true}
-                  inertia={true}
-                  inertiaDeceleration={3000}
-                  wheelDebounceTime={80}
-                  wheelPxPerZoomLevel={120}
-                  zoomAnimation={true}
-                  markerZoomAnimation={true}
-                  fadeAnimation={true}
-                  doubleClickZoom={false}
-                  style={{ height: '100%', width: '100%' }}
-                >
-                  <FixSize />
-                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
-                  <ClickToSetMarker onSet={setMarker} />
-                  {marker && (
-                    <>
-                      <Marker position={[marker.lat, marker.lng]} icon={markerIcon} />
-                      <Marker position={[marker.lat, marker.lng]} icon={pulsingIcon} />
-                    </>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Images</label>
+                  <input type="file" accept="image/*" multiple onChange={onFilesChange} />
+                  {uploading && <div className="mt-2 text-xs text-blue-600">Uploading...</div>}
+                  {uploadError && <div className="mt-2 text-xs text-red-600">{uploadError}</div>}
+                  {errors.images && <div className="mt-2 text-xs text-red-600">{errors.images}</div>}
+                  {imageUrls.length > 0 && (
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {imageUrls.map((url, idx) => (
+                        <div key={idx} className="border rounded-md p-2 text-xs text-gray-600">
+                          <a href={url} target="_blank" rel="noreferrer" className="text-blue-600 break-all">Image URL</a>
+                        </div>
+                      ))}
+                    </div>
                   )}
-                </MapContainer>
-              </div>
-              <div className="mt-2 text-sm text-gray-700">
-                GPS: {marker ? `${marker.lat.toFixed(6)}, ${marker.lng.toFixed(6)}` : 'Click on the map to set location'}
-              </div>
-              {errors.location && <div className="mt-1 text-xs text-red-600">{errors.location}</div>}
-            </div>
-          </div>
+                </div>
 
-          <div className="mt-8 flex gap-3">
-            <button className="px-4 py-2 rounded-full bg-primary text-white" disabled={uploading || submitting} onClick={handleSubmit}>Save</button>
-            <button className="px-4 py-2 rounded-full border">Cancel</button>
-          </div>
-          {submitResult && (
-            <div className={`mt-2 text-sm ${submitResult.status === 'success' ? 'text-green-600' : 'text-red-600'}`}>
-              {submitResult.message}
+                <div>
+                  <label className="block text-sm font-medium mb-1">Video URL <span className="text-gray-400 font-normal">(optional)</span></label>
+                  <input
+                    type="url"
+                    value={videoUrl}
+                    onChange={e => setVideoUrl(e.target.value)}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    className="w-full border rounded-md px-3 py-2 text-sm"
+                  />
+                  <p className="mt-1 text-xs text-gray-400">Paste a YouTube link or any direct video URL.</p>
+                </div>
+              </div>
+
+              <div>
+                <div className="h-[300px] sm:h-[420px] w-full rounded-md overflow-hidden border">
+                  <MapContainer
+                    center={[center.lat, center.lng]}
+                    zoom={8}
+                    minZoom={6}
+                    maxZoom={18}
+                    preferCanvas={true}
+                    inertia={true}
+                    inertiaDeceleration={3000}
+                    wheelDebounceTime={80}
+                    wheelPxPerZoomLevel={120}
+                    zoomAnimation={true}
+                    markerZoomAnimation={true}
+                    fadeAnimation={true}
+                    doubleClickZoom={false}
+                    style={{ height: '100%', width: '100%' }}
+                  >
+                    <FixSize />
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap contributors" />
+                    <ClickToSetMarker onSet={setMarker} />
+                    {marker && (
+                      <>
+                        <Marker position={[marker.lat, marker.lng]} icon={markerIcon} />
+                        <Marker position={[marker.lat, marker.lng]} icon={pulsingIcon} />
+                      </>
+                    )}
+                  </MapContainer>
+                </div>
+                <div className="mt-2 text-sm text-gray-700">
+                  GPS: {marker ? `${marker.lat.toFixed(6)}, ${marker.lng.toFixed(6)}` : 'Click on the map to set location'}
+                </div>
+                {errors.location && <div className="mt-1 text-xs text-red-600">{errors.location}</div>}
+              </div>
             </div>
-          )}
-          {needsAuth && (
-            <div className="mt-2">
+
+            <div className="mt-8 flex gap-3">
               <button
-                className="px-3 py-1 rounded-full border text-sm"
-                onClick={() => (window.location.href = `${API_BASE_URL}/oauth2/authorization/google`)}
+                className="px-4 py-2 rounded-full bg-primary text-white disabled:opacity-60"
+                disabled={uploading || submitting || loadingIncident}
+                onClick={handleSubmit}
               >
-                Login with Google
+                {submitting
+                  ? (isEditMode ? 'Updating…' : 'Saving…')
+                  : (isEditMode ? 'Update' : 'Save')}
               </button>
+              <button className="px-4 py-2 rounded-full border" onClick={() => navigate('/posts')}>Cancel</button>
             </div>
-          )}
+            {submitResult && (
+              <div className={`mt-2 text-sm ${submitResult.status === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                {submitResult.message}
+              </div>
+            )}
+            {needsAuth && (
+              <div className="mt-2">
+                <button
+                  className="px-3 py-1 rounded-full border text-sm"
+                  onClick={() => (window.location.href = `${API_BASE_URL}/oauth2/authorization/google`)}
+                >
+                  Login with Google
+                </button>
+              </div>
+            )}
 
-          <pre className="mt-6 text-xs bg-gray-50 p-3 rounded border overflow-auto">{JSON.stringify(payload, null, 2)}</pre>
           </div>
         </div>
       </div>

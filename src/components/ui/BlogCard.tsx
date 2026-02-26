@@ -20,9 +20,9 @@ const BlogCard = ({ image, category, title, excerpt, link = '#' }: BlogCardProps
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
         />
       </div>
-      <div className="p-8">
+      <div className="p-6 md:p-8">
         <span className="inline-block px-3 py-1 text-xs font-semibold text-primary bg-primary/10 rounded-full uppercase tracking-wider">{category}</span>
-        <h3 className="text-2xl font-bold mt-4 mb-3 leading-tight group-hover:text-primary transition-colors">{title}</h3>
+        <h3 className="text-xl md:text-2xl font-bold mt-4 mb-3 leading-tight group-hover:text-primary transition-colors">{title}</h3>
         <p className="text-gray-600 mb-6 leading-relaxed">{excerpt}</p>
         <Link
           to={link}
