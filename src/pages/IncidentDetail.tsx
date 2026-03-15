@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { MessageSquare, Send, LogIn, Video } from 'lucide-react'
-import { divisions, districts, upazilas } from '../data/bdLocations'
 import api from '../config/api'
 import { useAuth } from '../context/AuthContext'
 import 'leaflet/dist/leaflet.css'
@@ -28,9 +27,6 @@ type Incident = {
     division?: string
     district?: string
     upazila?: string
-    divisionCode?: string
-    districtCode?: string
-    upazilaCode?: string
     lat?: number
     lng?: number
   }
@@ -41,19 +37,6 @@ type Incident = {
   createdAt: string
   updatedAt: string
   comments: Comment[]
-}
-
-function codeToDivisionName(code?: string) {
-  if (!code) return undefined
-  return divisions.find(d => d.code === code)?.name || code
-}
-function codeToDistrictName(code?: string) {
-  if (!code) return undefined
-  return districts.find(d => d.code === code)?.name || code
-}
-function codeToUpazilaName(code?: string) {
-  if (!code) return undefined
-  return upazilas.find(u => u.code === code)?.name || code
 }
 
 const statusStyles: Record<string, string> = {
@@ -146,9 +129,9 @@ export default function IncidentDetail() {
 
   const locationText = useMemo(() => {
     if (!item?.location) return ''
-    const upazilaName = item.location.upazila || codeToUpazilaName(item.location.upazilaCode)
-    const districtName = item.location.district || codeToDistrictName(item.location.districtCode)
-    const divisionName = item.location.division || codeToDivisionName(item.location.divisionCode)
+    const upazilaName = item.location.upazila
+    const districtName = item.location.district
+    const divisionName = item.location.division
     return [upazilaName, districtName, divisionName].filter(Boolean).join(', ')
   }, [item])
 

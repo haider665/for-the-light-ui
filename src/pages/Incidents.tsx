@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Card from '../components/ui/Card'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { divisions, districts, upazilas } from '../data/bdLocations'
+import { divisionNames, getDistricts, getUpazilas } from '../data/bdLocations'
 import api from '../config/api'
 
 
@@ -15,9 +15,6 @@ type Incident = {
     division?: string
     district?: string
     upazila?: string
-    divisionCode?: string
-    districtCode?: string
-    upazilaCode?: string
     lat?: number
     lng?: number
   }
@@ -26,19 +23,6 @@ type Incident = {
   userName: string
   createdAt: string
   updatedAt: string
-}
-
-function codeToDivisionName(code?: string) {
-  if (!code) return undefined
-  return divisions.find(d => d.code === code)?.name || code
-}
-function codeToDistrictName(code?: string) {
-  if (!code) return undefined
-  return districts.find(d => d.code === code)?.name || code
-}
-function codeToUpazilaName(code?: string) {
-  if (!code) return undefined
-  return upazilas.find(u => u.code === code)?.name || code
 }
 
 function fmtDate(iso?: string) {
@@ -75,8 +59,29 @@ export default function Incidents() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [selectedStatus, setSelectedStatus] = useState<string>('')
+  const [selectedDivision, setSelectedDivision] = useState<string>('')
+  const [selectedDistrict, setSelectedDistrict] = useState<string>('')
+  const [selectedUpazila, setSelectedUpazila] = useState<string>('')
   const [page, setPage] = useState(1)
   const PAGE_SIZE = 9
+
+  // All divisions from shared BD_DATA
+  const divisionOptions = useMemo(() =>
+    divisionNames.map(name => ({ value: name, label: name })),
+    []
+  )
+
+  // Districts: filtered by selected division
+  const districtOptions = useMemo(() => {
+    if (!selectedDivision) return []
+    return getDistricts(selectedDivision).map(name => ({ value: name, label: name }))
+  }, [selectedDivision])
+
+  // Upazilas: filtered by selected division + district
+  const upazilaOptions = useMemo(() => {
+    if (!selectedDivision || !selectedDistrict) return []
+    return getUpazilas(selectedDivision, selectedDistrict).map(name => ({ value: name, label: name }))
+  }, [selectedDivision, selectedDistrict])
 
   useEffect(() => {
     const run = async () => {
@@ -98,9 +103,9 @@ export default function Incidents() {
     return [...items]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .map(it => {
-        const upazilaName = it.location?.upazila || codeToUpazilaName(it.location?.upazilaCode)
-        const districtName = it.location?.district || codeToDistrictName(it.location?.districtCode)
-        const divisionName = it.location?.division || codeToDivisionName(it.location?.divisionCode)
+        const upazilaName = it.location?.upazila
+        const districtName = it.location?.district
+        const divisionName = it.location?.division
         const location = [upazilaName, districtName, divisionName].filter(Boolean).join(', ')
         const image = it.images?.[0] || '/images/temp/test.png'
         return { ...it, location, image }
@@ -109,9 +114,30 @@ export default function Incidents() {
 
   const filteredCards = useMemo(() => {
     setPage(1)
-    if (!selectedStatus) return cards
-    return cards.filter(c => c.status === selectedStatus)
-  }, [cards, selectedStatus])
+    let result = cards
+    if (selectedStatus) {
+      result = result.filter(c => c.status === selectedStatus)
+    }
+    if (selectedDivision) {
+      result = result.filter(c => {
+        const orig = items.find(i => i.id === c.id)
+        return orig?.location?.division === selectedDivision
+      })
+    }
+    if (selectedDistrict) {
+      result = result.filter(c => {
+        const orig = items.find(i => i.id === c.id)
+        return orig?.location?.district === selectedDistrict
+      })
+    }
+    if (selectedUpazila) {
+      result = result.filter(c => {
+        const orig = items.find(i => i.id === c.id)
+        return orig?.location?.upazila === selectedUpazila
+      })
+    }
+    return result
+  }, [cards, items, selectedStatus, selectedDivision, selectedDistrict, selectedUpazila])
 
   const totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE))
   const pagedCards = useMemo(
@@ -132,6 +158,58 @@ export default function Incidents() {
               {loading ? 'Loading…' : 'Refresh'}
             </button>
           </div>
+          {/* Location filter dropdowns */}
+          <div className="flex flex-wrap gap-3 mb-4">
+            <select
+              value={selectedDivision}
+              onChange={e => {
+                setSelectedDivision(e.target.value)
+                setSelectedDistrict('')
+                setSelectedUpazila('')
+              }}
+              className="px-3 py-2 rounded-md border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              <option value="">All Divisions</option>
+              {divisionOptions.map(d => (
+                <option key={d.value} value={d.value}>{d.label}</option>
+              ))}
+            </select>
+
+            <select
+              value={selectedDistrict}
+              onChange={e => {
+                setSelectedDistrict(e.target.value)
+                setSelectedUpazila('')
+              }}
+              className="px-3 py-2 rounded-md border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              <option value="">All Districts</option>
+              {districtOptions.map(d => (
+                <option key={d.value} value={d.value}>{d.label}</option>
+              ))}
+            </select>
+
+            <select
+              value={selectedUpazila}
+              onChange={e => setSelectedUpazila(e.target.value)}
+              className="px-3 py-2 rounded-md border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+            >
+              <option value="">All Upazilas</option>
+              {upazilaOptions.map(u => (
+                <option key={u.value} value={u.value}>{u.label}</option>
+              ))}
+            </select>
+
+            {(selectedDivision || selectedDistrict || selectedUpazila) && (
+              <button
+                onClick={() => { setSelectedDivision(''); setSelectedDistrict(''); setSelectedUpazila('') }}
+                className="px-3 py-2 rounded-md text-sm text-red-600 hover:bg-red-50 transition-colors"
+              >
+                Clear Location
+              </button>
+            )}
+          </div>
+
           {/* Status filter pills */}
           <div className="flex flex-wrap gap-2 mb-6">
             <button

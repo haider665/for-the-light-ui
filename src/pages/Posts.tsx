@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { divisions, districts, upazilas } from '../data/bdLocations'
 import api, { API_BASE_URL } from '../config/api'
 import Sidebar from '../components/dashboard/Sidebar'
 
@@ -10,13 +9,9 @@ type Incident = {
   description: string
   status: string
   location: {
-    // optional human-readable names if backend provides them
     division?: string
     district?: string
     upazila?: string
-    divisionCode?: string
-    districtCode?: string
-    upazilaCode?: string
     lat?: number
     lng?: number
   }
@@ -27,19 +22,6 @@ type Incident = {
   updatedAt: string
 }
 
-
-function codeToDivisionName(code?: string) {
-  if (!code) return undefined
-  return divisions.find(d => d.code === code)?.name || code
-}
-function codeToDistrictName(code?: string) {
-  if (!code) return undefined
-  return districts.find(d => d.code === code)?.name || code
-}
-function codeToUpazilaName(code?: string) {
-  if (!code) return undefined
-  return upazilas.find(u => u.code === code)?.name || code
-}
 
 function fmtDate(iso?: string) {
   if (!iso) return ''
@@ -147,10 +129,9 @@ const Posts = () => {
   const rows = useMemo(() => {
     return (data || []).map((it) => {
       const locParts: string[] = []
-      // Prefer names provided by backend; fall back to mapping from codes
-      const upazilaName = it.location?.upazila || codeToUpazilaName(it.location?.upazilaCode)
-      const districtName = it.location?.district || codeToDistrictName(it.location?.districtCode)
-      const divisionName = it.location?.division || codeToDivisionName(it.location?.divisionCode)
+      const upazilaName = it.location?.upazila
+      const districtName = it.location?.district
+      const divisionName = it.location?.division
       if (upazilaName) locParts.push(upazilaName)
       if (districtName) locParts.push(districtName)
       if (divisionName) locParts.push(divisionName)
