@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { MessageSquare, Send, LogIn, Video } from 'lucide-react'
+import { MessageSquare, Send, LogIn, Video, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import api from '../config/api'
 import { useAuth } from '../context/AuthContext'
 import 'leaflet/dist/leaflet.css'
@@ -87,6 +87,20 @@ export default function IncidentDetail() {
   const [submitting, setSubmitting] = useState(false)
   const [commentError, setCommentError] = useState<string | null>(null)
   const [commentSuccess, setCommentSuccess] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+
+  // Lightbox keyboard navigation
+  useEffect(() => {
+    if (lightboxIndex === null) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightboxIndex(null)
+      if (e.key === 'ArrowRight' && item?.images) setLightboxIndex(i => i !== null ? Math.min(i + 1, item.images.length - 1) : null)
+      if (e.key === 'ArrowLeft') setLightboxIndex(i => i !== null ? Math.max(i - 1, 0) : null)
+    }
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+  }, [lightboxIndex, item?.images])
 
   useEffect(() => { window.scrollTo(0, 0) }, [id])
 
@@ -210,7 +224,11 @@ export default function IncidentDetail() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {item.images?.length ? (
                 item.images.map((img, idx) => (
-                  <div key={idx} className="aspect-video bg-gray-100 overflow-hidden rounded-lg">
+                  <div
+                    key={idx}
+                    className="aspect-video bg-gray-100 overflow-hidden rounded-lg cursor-pointer hover:ring-2 hover:ring-teal-400 transition-shadow"
+                    onClick={() => setLightboxIndex(idx)}
+                  >
                     <img src={img} alt={`${item.title} ${idx + 1}`} className="w-full h-full object-cover" loading="lazy" />
                   </div>
                 ))
@@ -219,6 +237,82 @@ export default function IncidentDetail() {
               )}
             </div>
           </div>
+
+          {/* Lightbox */}
+          {lightboxIndex !== null && item.images?.length && (
+            <div
+              className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-xl bg-white/30"
+              onClick={() => setLightboxIndex(null)}
+            >
+              {/* Close button */}
+              <button
+                className="absolute top-5 right-5 w-10 h-10 flex items-center justify-center rounded-full bg-white/70 text-gray-700 hover:bg-white hover:text-gray-900 shadow-lg backdrop-blur-sm transition-all z-10"
+                onClick={() => setLightboxIndex(null)}
+                aria-label="Close gallery"
+              >
+                <X size={20} strokeWidth={2.5} />
+              </button>
+
+              {/* Counter pill */}
+              <div className="absolute top-5 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-sm shadow text-gray-700 text-xs font-semibold tracking-wide z-10">
+                {lightboxIndex + 1} / {item.images.length}
+              </div>
+
+              {/* Previous */}
+              {lightboxIndex > 0 && (
+                <button
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-white/70 text-gray-700 hover:bg-white hover:text-gray-900 shadow-lg backdrop-blur-sm transition-all z-10"
+                  onClick={e => { e.stopPropagation(); setLightboxIndex(lightboxIndex - 1) }}
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={22} strokeWidth={2.5} />
+                </button>
+              )}
+
+              {/* Image container */}
+              <div
+                className="relative max-h-[75vh] max-w-[70vw] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5"
+                onClick={e => e.stopPropagation()}
+              >
+                <img
+                  src={item.images[lightboxIndex]}
+                  alt={`${item.title} ${lightboxIndex + 1}`}
+                  className="max-h-[75vh] max-w-[70vw] object-contain select-none"
+                  draggable={false}
+                />
+              </div>
+
+              {/* Next */}
+              {lightboxIndex < item.images.length - 1 && (
+                <button
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-white/70 text-gray-700 hover:bg-white hover:text-gray-900 shadow-lg backdrop-blur-sm transition-all z-10"
+                  onClick={e => { e.stopPropagation(); setLightboxIndex(lightboxIndex + 1) }}
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={22} strokeWidth={2.5} />
+                </button>
+              )}
+
+              {/* Thumbnail strip */}
+              {item.images.length > 1 && (
+                <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2 px-4 py-2.5 rounded-2xl bg-white/70 backdrop-blur-sm shadow-lg z-10">
+                  {item.images.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={e => { e.stopPropagation(); setLightboxIndex(idx) }}
+                      className={`w-12 h-9 rounded-lg overflow-hidden transition-all border-2 ${
+                        idx === lightboxIndex
+                          ? 'border-teal-500 ring-2 ring-teal-500/30 scale-105'
+                          : 'border-transparent opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={img} alt="" className="w-full h-full object-cover" draggable={false} />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Video */}
           {item.videoUrl && (
