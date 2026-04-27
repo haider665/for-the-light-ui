@@ -250,7 +250,7 @@ const Home = () => {
               <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-primary/10 to-transparent blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
               <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-premium-xl">
                 <img
-                  src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600"
+                  src="/images/backgrounds/device.png"
                   alt="Solar Technology"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
@@ -264,7 +264,7 @@ const Home = () => {
               <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-primary/10 to-transparent blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
               <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-premium-xl">
                 <img
-                  src="/images/backgrounds/communityLearning.jpg"
+                  src="/images/backgrounds/communityLearning2.jpg"
                   alt="Community Meeting"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
