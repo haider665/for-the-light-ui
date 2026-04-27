@@ -5,8 +5,8 @@ import BlogCard from '../components/ui/BlogCard'
 import Button from '../components/ui/Button'
 
 const stats = [
-  { value: '50K+', label: 'Lives Impacted' },
-  { value: '120+', label: 'Communities Served' },
+  { value: '10K+', label: 'Lives Impacted' },
+  { value: '20+', label: 'Communities Served' },
   { value: '16', label: 'Partner Organizations' },
   { value: '100%', label: 'Program Success Rate' },
 ]
@@ -35,22 +35,21 @@ const pillars = [
 ]
 
 const partners = [
-  { src: '/images/partners/541356213_1366037542113871_7082279413502100796_n.jpg', alt: 'Partner' },
-  { src: '/images/partners/ActionAid_logo.png', alt: 'ActionAid' },
-  { src: '/images/partners/AL Logo Transparent.png', alt: 'AL' },
-  { src: '/images/partners/bridge for billions.png', alt: 'Bridge for Billions' },
-  { src: '/images/partners/CIVICUS Transparent.png', alt: 'CIVICUS' },
-  { src: '/images/partners/create the future.png', alt: 'Create The Future' },
-  { src: '/images/partners/DDI South Asia (Transparent).png', alt: 'DDI South Asia' },
-  { src: '/images/partners/DDI Transparent.png', alt: 'DDI' },
-  { src: '/images/partners/eco leaders.png', alt: 'Eco Leaders' },
-  { src: '/images/partners/ide-powering-entrepreneurs-to-end-poverty.svg', alt: 'IDE' },
-  { src: '/images/partners/Logo_JCI.png', alt: 'JCI' },
-  { src: '/images/partners/manusher-jonno-foundation-seeklogo.png', alt: 'Manusher Jonno Foundation' },
-  { src: '/images/partners/p5-sglogo-landscape2.png', alt: 'P5' },
-  { src: '/images/partners/RestorationFactory-logo.png', alt: 'Restoration Factory' },
-  { src: '/images/partners/TheAsiaFoundation_Logo_PlumHZ.svg', alt: 'The Asia Foundation' },
-  { src: '/images/partners/UNEP - Transparent_1.png', alt: 'UNEP' },
+  { src: '/images/new-partners/1.png', alt: 'Partner 1' },
+  { src: '/images/new-partners/2.png', alt: 'Partner 2' },
+  { src: '/images/new-partners/3.png', alt: 'Partner 3' },
+  { src: '/images/new-partners/4.png', alt: 'Partner 4' },
+  { src: '/images/new-partners/5.png', alt: 'Partner 5' },
+  { src: '/images/new-partners/6.png', alt: 'Partner 6' },
+  { src: '/images/new-partners/7.png', alt: 'Partner 7' },
+  { src: '/images/new-partners/8.png', alt: 'Partner 8' },
+  { src: '/images/new-partners/9.png', alt: 'Partner 9' },
+  { src: '/images/new-partners/10.png', alt: 'Partner 10' },
+  { src: '/images/new-partners/11.png', alt: 'Partner 11' },
+  { src: '/images/new-partners/12.png', alt: 'Partner 12' },
+  { src: '/images/new-partners/13.png', alt: 'Partner 13' },
+  { src: '/images/new-partners/JCI logo.png', alt: 'JCI' },
+  { src: '/images/new-partners/ftl logo.png', alt: 'For The Light' },
 ]
 
 const Home = () => {
@@ -149,6 +148,37 @@ const Home = () => {
                 <div className="text-3xl font-extrabold text-primary mb-1">64M</div>
                 <div className="text-xs text-gray-500 font-medium leading-snug">People in Bangladesh affected by climate disasters annually</div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Documentary Section ─── */}
+      <section className="py-24 md:py-36 bg-white relative overflow-hidden">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12 max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="w-10 h-[2px] bg-primary"></div>
+              <span className="text-sm font-semibold tracking-widest text-primary uppercase">Documentary</span>
+              <div className="w-10 h-[2px] bg-primary"></div>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+              Digital Democracy Initiative
+            </h2>
+            <p className="text-lg text-gray-500 leading-relaxed">
+              Watch the documentary we prepared after the successful completion of the Digital Democracy Initiative — a journey of innovation, collaboration, and impact.
+            </p>
+          </div>
+          <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/SvUvzXlN06U?si=1Yt_SnaRTqjMzh4e"
+                title="DDI South Asia First Cohort Documentary"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              ></iframe>
             </div>
           </div>
         </div>
@@ -339,7 +369,7 @@ const Home = () => {
             <div className="flex animate-marquee gap-16 md:gap-24 w-max">
               {[...partners, ...partners].map(({ src, alt }, i) => (
                 <div key={`${src}-${i}`} className="flex-shrink-0 flex items-center grayscale hover:grayscale-0 opacity-40 hover:opacity-100 transition-all duration-500">
-                  <img src={src} alt={alt} className="h-10 md:h-14 w-auto max-w-[130px] object-contain" />
+                  <img src={src} alt={alt} className="h-48 md:h-60 w-auto max-w-[600px] object-contain" />
                 </div>
               ))}
             </div>
