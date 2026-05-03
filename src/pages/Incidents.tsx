@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Card from '../components/ui/Card'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, BookOpen, ShieldCheck } from 'lucide-react'
 import { divisionNames, getDistricts, getUpazilas } from '../data/bdLocations'
 import api from '../config/api'
 
@@ -158,6 +158,33 @@ export default function Incidents() {
               {loading ? 'Loading…' : 'Refresh'}
             </button>
           </div>
+
+          {/* TRACE Playbook Banner */}
+          <div className="mb-8 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/5 via-white to-primary/3 p-6 md:p-8 shadow-sm">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <ShieldCheck size={24} className="text-primary" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-lg md:text-xl font-bold text-gray-900">
+                  Stay Safe, Stay Informed: The TRACE Playbook
+                </h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Before filing your report, ensure you possess the <strong className="text-gray-800">TRACE Playbook (2026 Edition)</strong>. This definitive field manual, backed by the <strong className="text-gray-800">Digital Democracy Initiative</strong>, provides the training necessary to leverage the RTI Act with precision while safeguarding your digital security on the ground.
+                </p>
+                <a
+                  href="https://drive.google.com/file/d/1mMaSrNaAyCPTGfw8c65cb6frNy4vz_3h/view?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 mt-2 px-5 py-2.5 rounded-full bg-primary text-white text-sm font-semibold hover:bg-primary-dark transition-colors shadow-sm"
+                >
+                  <BookOpen size={16} />
+                  Download RTI Guideline
+                </a>
+              </div>
+            </div>
+          </div>
+
           {/* Location filter dropdowns */}
           <div className="flex flex-wrap gap-3 mb-4">
             <select

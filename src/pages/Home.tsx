@@ -49,7 +49,7 @@ const partners = [
   { src: '/images/new-partners/12.png', alt: 'Partner 12' },
   { src: '/images/new-partners/13.png', alt: 'Partner 13' },
   { src: '/images/new-partners/JCI logo.png', alt: 'JCI' },
-  { src: '/images/new-partners/ftl logo.png', alt: 'For The Light' },
+  // { src: '/images/new-partners/ftl logo.png', alt: 'For The Light' },
 ]
 
 const Home = () => {
@@ -159,16 +159,35 @@ const Home = () => {
           <div className="text-center mb-12 max-w-3xl mx-auto">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-10 h-[2px] bg-primary"></div>
-              <span className="text-sm font-semibold tracking-widest text-primary uppercase">Documentary</span>
+              <span className="text-sm font-semibold tracking-widest text-primary uppercase">The Story Behind the Data</span>
               <div className="w-10 h-[2px] bg-primary"></div>
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-              Digital Democracy Initiative
+              A Journey of Innovation and Impact
             </h2>
-            <p className="text-lg text-gray-500 leading-relaxed">
-              Watch the documentary we prepared after the successful completion of the Digital Democracy Initiative — a journey of innovation, collaboration, and impact.
-            </p>
           </div>
+
+          <div className="max-w-4xl mx-auto mb-14">
+
+            <div className="space-y-5 text-lg text-gray-600 leading-relaxed">
+              <p>
+                Welcome to the <strong className="text-gray-800">Community Watch Portal</strong>—the heart of <strong className="text-gray-800">Project TRACE</strong>. We are proud to be part of the <strong className="text-gray-800">Digital Democracy Initiative (DDI)</strong>. This global program is implemented regionally by the organization <strong className="text-gray-800">DDI South Asia</strong>, with vital funding and support from <strong className="text-gray-800">Accountability Lab</strong> and <strong className="text-gray-800">CIVICUS</strong>.
+              </p>
+              <p>
+                But beyond the partnerships, this is a story about local youth taking charge.
+              </p>
+              <p>
+                Instead of just accepting broken infrastructure and public health hazards in Patuakhali, we decided to act. We trained <strong className="text-gray-800">50 local youth</strong> (half of them young women) to step up as digital civic auditors. Armed with smartphones and this very portal, they went out into the field and gathered <strong className="text-gray-800">128 raw hazard reports</strong>. We carefully verified these down to <strong className="text-gray-800">60 rock-solid, GPS-tagged cases</strong>.
+              </p>
+              <p>
+                When we presented this undeniable data to the local administration, something amazing happened: they didn't get defensive; they got to work. In just three months, authorities have already completely fixed <strong className="text-gray-800">13 critical hazards</strong> based on our youth's reports, and <strong className="text-gray-800">11 more major repairs</strong> are happening right now.
+              </p>
+              <p className="text-xl font-medium text-gray-700">
+                👇 Watch the short documentary below to see exactly how these young citizens broke the silence and forced real change.
+              </p>
+            </div>
+          </div>
+
           <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl">
             <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
               <iframe
@@ -187,7 +206,7 @@ const Home = () => {
       {/* ─── Our Pillars ─── */}
       <section className="py-24 md:py-36 bg-surface-50 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent"></div>
-        
+
         <div className="container mx-auto px-4 relative">
           <div className="text-center mb-16 md:mb-20 max-w-3xl mx-auto">
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -384,7 +403,7 @@ const Home = () => {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-primary/15 via-transparent to-transparent"></div>
         {/* Grid pattern */}
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}></div>
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center text-white">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">
