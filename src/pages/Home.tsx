@@ -154,9 +154,9 @@ const Home = () => {
       </section>
 
       {/* ─── Documentary Section ─── */}
-      <section className="py-24 md:py-36 bg-white relative overflow-hidden">
+      <section className="pt-0 pb-12 md:pb-20 bg-white relative overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12 max-w-3xl mx-auto">
+          <div className="text-center mb-6 max-w-3xl mx-auto">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-10 h-[2px] bg-primary"></div>
               <span className="text-sm font-semibold tracking-widest text-primary uppercase">The Story Behind the Data</span>
