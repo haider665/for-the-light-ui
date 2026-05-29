@@ -335,6 +335,13 @@ const Home = () => {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 max-w-7xl mx-auto">
             <BlogCard
+              image="/images/impacts/project_trace_townhall.jpg"
+              category="Case Study"
+              title="From Grievance to Resolution: The Complete Data-Driven Journey of Project TRACE"
+              excerpt="How localized grievances were engineered into unassailable datasets that commanded institutional action — 13 infrastructure resolutions in 3 months."
+              link="/article/5"
+            />
+            <BlogCard
               image="/images/backgrounds/communityLearning.jpg"
               category="Technology & Innovation"
               title="The Resilience Loop: How Technology Empowers Women in Coastal Bangladesh"
@@ -347,13 +354,6 @@ const Home = () => {
               title="From Fatima to Policy: Amplifying Women's Voices"
               excerpt="Learn about our advocacy efforts to ensure women's voices are heard in climate policy decisions."
               link="/article/2"
-            />
-            <BlogCard
-              image="/images/backgrounds/womenEngineering.jpg"
-              category="Stories from the Field"
-              title="Engineering for Empathy: Designing with Women at the Center"
-              excerpt="Discover our human-centered design approach, ensuring our solutions truly serve the community."
-              link="/article/3"
             />
           </div>
 

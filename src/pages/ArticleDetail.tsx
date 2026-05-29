@@ -375,9 +375,10 @@ const ArticleDetail = () => {
       {/* Article Content */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <article 
-              className="prose prose-lg max-w-none"
+              className="prose prose-lg max-w-none text-justify w-full"
+              style={{ maxWidth: '100%' }}
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
 

@@ -3,7 +3,7 @@ import { Facebook, Instagram, Linkedin } from 'lucide-react'
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t mt-20">
+    <footer className="bg-white border-t">
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col items-center gap-8">
           <Link to="/" className="flex items-center gap-2">

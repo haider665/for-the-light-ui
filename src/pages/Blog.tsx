@@ -111,24 +111,23 @@ const Blog = () => {
                   <div className="aspect-[4/3] overflow-hidden relative">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10"></div>
                     <img
-                      src="/images/backgrounds/communityLearning.jpg"
-                      alt="Featured"
+                      src="/images/impacts/project_trace_townhall.jpg"
+                      alt="Project TRACE Townhall"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                   </div>
                   <div className="p-6 md:p-12 flex flex-col justify-center space-y-5 md:space-y-6">
                     <span className="inline-block px-4 py-2 text-xs font-semibold text-primary bg-primary/10 rounded-full uppercase tracking-wider w-fit">
-                      Technology & Innovation
+                      Case Study
                     </span>
                     <h2 className="text-2xl md:text-4xl font-bold leading-tight group-hover:text-primary transition-colors">
-                      The Resilience Loop: How Technology Empowers Women in Coastal Bangladesh
+                      From Grievance to Resolution: The Complete Data-Driven Journey of Project TRACE
                     </h2>
                     <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                      Explore how innovative technologies are helping women in coastal communities
-                      adapt to climate change and build resilience.
+                      How localized grievances were engineered into unassailable datasets that commanded institutional action — 13 infrastructure resolutions in 3 months.
                     </p>
-                    <Link to="/article/1" className="text-primary font-semibold inline-flex items-center gap-3 text-lg hover:gap-5 transition-all">
-                      Read More →
+                    <Link to="/article/5" className="text-primary font-semibold inline-flex items-center gap-3 text-lg hover:gap-5 transition-all">
+                      Read the Full Story →
                     </Link>
                   </div>
                 </div>
