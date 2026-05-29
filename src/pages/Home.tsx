@@ -171,7 +171,7 @@ const Home = () => {
 
             <div className="space-y-5 text-lg text-gray-600 leading-relaxed">
               <p>
-                Welcome to the <strong className="text-gray-800">Community Watch Portal</strong>—the heart of <strong className="text-gray-800">Project TRACE</strong>. We are proud to be part of the <strong className="text-gray-800">Digital Democracy Initiative (DDI)</strong>. This global program is implemented regionally by the organization <strong className="text-gray-800">DDI South Asia</strong>, with vital funding and support from <strong className="text-gray-800">Accountability Lab</strong> and <strong className="text-gray-800">CIVICUS</strong>.
+                Welcome to the <strong className="text-gray-800">Community Watch Portal</strong>—the heart of <strong className="text-gray-800">Project TRACE</strong>. We are proud to be part of the <a href="https://digitaldemocracyinitiative.net" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">Digital Democracy Initiative (DDI)</a>. This global program is implemented regionally by the organization <a href="https://ddisouthasia.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">DDI South Asia</a>, with vital funding and support from <a href="https://www.accountabilitylab.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">Accountability Lab</a> and <a href="https://www.civicus.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">CIVICUS</a>.
               </p>
               <p>
                 But beyond the partnerships, this is a story about local youth taking charge.
