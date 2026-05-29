@@ -170,7 +170,11 @@ export default function Incidents() {
                   Stay Safe, Stay Informed: The TRACE Playbook
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Before filing your report, ensure you possess the <strong className="text-gray-800">TRACE Playbook (2026 Edition)</strong>. This definitive field manual, backed by the <strong className="text-gray-800">Digital Democracy Initiative</strong>, provides the training necessary to leverage the RTI Act with precision while safeguarding your digital security on the ground.
+                  Before filing your report to the public feed, ensure you possess the <strong className="text-gray-800">TRACE Playbook (2026 Edition)</strong>. This definitive field manual was developed through the vital contribution of the{' '}
+                  <a href="https://digitaldemocracyinitiative.net" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Digital Democracy Initiative (DDI)</a>, in strategic collaboration with{' '}
+                  <a href="https://www.accountabilitylab.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">Accountability Lab</a>,{' '}
+                  <a href="https://ddisouthasia.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">DDI South Asia</a>, and{' '}
+                  <a href="https://www.civicus.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">CIVICUS</a>. It provides the comprehensive training necessary to leverage the Right to Information (RTI) Act with precision, while strictly safeguarding your digital security and privacy on the ground.
                 </p>
                 <a
                   href="https://drive.google.com/file/d/1mMaSrNaAyCPTGfw8c65cb6frNy4vz_3h/view?usp=sharing"
@@ -241,9 +245,8 @@ export default function Incidents() {
           <div className="flex flex-wrap gap-2 mb-6">
             <button
               onClick={() => setSelectedStatus('')}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                selectedStatus === '' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedStatus === '' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
             >
               All
             </button>
@@ -251,11 +254,10 @@ export default function Incidents() {
               <button
                 key={s}
                 onClick={() => setSelectedStatus(prev => prev === s ? '' : s)}
-                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  selectedStatus === s
-                    ? `${statusStyles[s]} ring-2 ring-offset-1 ring-current`
-                    : `${statusStyles[s]} opacity-70 hover:opacity-100`
-                }`}
+                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedStatus === s
+                  ? `${statusStyles[s]} ring-2 ring-offset-1 ring-current`
+                  : `${statusStyles[s]} opacity-70 hover:opacity-100`
+                  }`}
               >
                 {s.replace(/_/g, ' ')}
               </button>
@@ -308,11 +310,10 @@ export default function Incidents() {
                 <button
                   key={p}
                   onClick={() => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-                  className={`w-9 h-9 rounded-md text-sm font-medium transition-colors ${
-                    p === page
-                      ? 'bg-gray-800 text-white'
-                      : 'border hover:bg-gray-100 text-gray-700'
-                  }`}
+                  className={`w-9 h-9 rounded-md text-sm font-medium transition-colors ${p === page
+                    ? 'bg-gray-800 text-white'
+                    : 'border hover:bg-gray-100 text-gray-700'
+                    }`}
                 >
                   {p}
                 </button>
@@ -328,6 +329,27 @@ export default function Incidents() {
               </button>
             </div>
           )}
+        </section>
+
+        {/* Initiative Partners */}
+        <section className="py-12 mt-8 border-t border-gray-100">
+          <p className="text-center text-base font-bold text-gray-700 mb-6">
+            A Digital Democracy Initiative project, in partnership with <a href="https://digitaldemocracyinitiative.net" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Digital Democracy Initiative</a>, and proudly funded and supported by <a href="https://ddisouthasia.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">DDI South Asia</a>, <a href="https://www.accountabilitylab.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Accountability Lab</a>, and <a href="https://www.civicus.org" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">CIVICUS</a>
+          </p>
+          <div className="flex items-center justify-center gap-8 md:gap-12 flex-wrap">
+            <a href="https://digitaldemocracyinitiative.net" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity">
+              <img src="/images/partners/DDI Transparent.png" alt="Digital Democracy Initiative" className="h-48 md:h-56 w-auto object-contain" />
+            </a>
+            <a href="https://www.civicus.org" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity">
+              <img src="/images/partners/CIVICUS Transparent.png" alt="CIVICUS" className="h-28 md:h-32 w-auto object-contain" />
+            </a>
+            <a href="https://ddisouthasia.org" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity">
+              <img src="/images/partners/DDI South Asia (Transparent).png" alt="DDI South Asia" className="h-28 md:h-32 w-auto object-contain" />
+            </a>
+            <a href="https://www.accountabilitylab.org" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity">
+              <img src="/images/partners/AL Logo Transparent.png" alt="Accountability Lab" className="h-28 md:h-32 w-auto object-contain" />
+            </a>
+          </div>
         </section>
       </div>
     </main>

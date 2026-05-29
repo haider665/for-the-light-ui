@@ -12,9 +12,18 @@ const Blog = () => {
     'Policy & Advocacy',
     'Stories from the Field',
     'Green Entrepreneurship',
+    'Case Study',
   ]
 
   const articles = [
+    {
+      id: '5',
+      image: "/images/impacts/project_trace_townhall.jpg",
+      category: 'Case Study',
+      title: 'From Grievance to Resolution: The Complete Data-Driven Journey of Project TRACE',
+      excerpt:
+        'How localized grievances were engineered into unassailable datasets that commanded institutional action — 13 infrastructure resolutions in 3 months.',
+    },
     {
       id: '1',
       image: "/images/backgrounds/communityLearning.jpg",

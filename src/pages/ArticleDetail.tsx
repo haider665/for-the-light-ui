@@ -271,6 +271,53 @@ const ArticleDetail = () => {
         <p>Every woman who succeeds in green entrepreneurship creates ripples—jobs for others, cleaner energy for communities, and hope for a sustainable future.</p>
       `,
     },
+    '5': {
+      title: 'From Grievance to Resolution: The Complete Data-Driven Journey of Project TRACE',
+      category: 'Case Study',
+      author: 'For The Light Team',
+      date: 'May 28, 2026',
+      readTime: '12 min read',
+      image: "/images/impacts/project_trace_townhall.jpg",
+      content: `
+        <p class="lead">In coastal Bangladesh, local communities have long faced overlapping vulnerabilities, from decaying civic infrastructure to severe climate exposure. For generations, these challenges were compounded by a systemic "suffocating silence"—a barrier where citizen complaints remained anecdotal, fragmented, and easily ignored by bureaucratic systems. Project TRACE (Transparency through Reporting, Advocacy, and Civic Engagement) was launched by For The Light as a direct technical response to this structural gap, proving that localized grievances can be engineered into unassailable datasets that command institutional action.</p>
+
+        <h2>Phase 1: Mobilizing the Digital Civic Ambassadors</h2>
+        <p>The foundation of Project TRACE relies on human infrastructure. In early 2026, For The Light recruited and deployed a highly disciplined cohort of <strong>50 Digital Civic Ambassadors</strong> (maintaining a strict 50% gender balance) across Patuakhali. Rather than acting as casual observers, these youth leaders underwent rigorous operational training. They were instructed in digital privacy protection, secure communications, and the tactical deployment of Right to Information (RTI) applications, transforming active youth into skilled grassroots civic auditors.</p>
+
+        <h2>Phase 2: Data Capture, Auditing, and Geospatial Verification</h2>
+        <p>Equipped with our centralized, secure reporting platform, ambassadors conducted exhaustive field audits of municipal infrastructure failures. The core innovation lay in the data verification protocol:</p>
+
+        <ol>
+          <li><strong>Raw Ingestion:</strong> Over a two-month field cycle, the platform ingested 128 raw community submissions regarding public health hazards, contaminated water infrastructure, and broken transport systems.</li>
+          <li><strong>Triangulation & Audit:</strong> Our backend team filtered these raw inputs against a strict verification matrix requiring distinct photographic evidence, verified GPS-tagged telemetry, and cross-referenced resident testimonies.</li>
+          <li><strong>The Data Output:</strong> This meticulous process yielded <strong>60 highly verified, data-dense incident reports</strong>, mapping exact municipal failures with absolute geospatial precision. Anecdotal complaints were officially replaced by undeniable empirical evidence.</li>
+        </ol>
+
+        <h2>Phase 3: Shifting the Citizen-State Relationship via Public Advocacy</h2>
+        <p>Armed with verified data, Project TRACE moved from mapping to systemic advocacy. For The Light hosted a historic, multi-stakeholder <strong>data-driven Townhall Meeting</strong> in Patuakhali. Confronted with public, hyper-localized dashboard data rather than vague emotional appeals, local government administrators, municipal authorities, and public sector decision-makers shifted from standard bureaucratic defensiveness to immediate, collaborative action.</p>
+
+        <p>The public data pipeline proved irresistible to the press, generating prominent print and broadcast media features that validated the community's demands and placed public attention squarely on data-driven structural repairs.</p>
+
+        <h2>The Ultimate Outcome: 13 Proven Physical Resolutions</h2>
+        <p>The true metric of success for Project TRACE is measured in physical steel, concrete, and public health outcomes. Within a compressed <strong>three-month operational window</strong>, the relevant government administrative bodies actively utilized our open platform data to coordinate and execute <strong>13 critical physical infrastructure resolutions</strong>, including:</p>
+
+        <ul>
+          <li>The thorough sanitization and reclamation of the Patuakhali Sadar public pond system.</li>
+          <li>Direct structural remediation of fractured transit routes and public utility safety lines.</li>
+          <li>The formal resolution of localized environmental hazards directly threatening public health.</li>
+        </ul>
+
+        <h2>A Scalable Global Success Story</h2>
+        <p>What began as a localized pilot in Patuakhali has now set a global standard for tech-enabled citizen engagement in the Global South. The overwhelming success of this project has been compiled into a prominent international Case Study submission for the global civil society alliance, <a href="https://www.civicus.org" target="_blank" rel="noopener noreferrer">CIVICUS</a>.</p>
+
+        <p>The continuous deployment, hosting, and field scaling of the Project TRACE ecosystem stand as a testament to what is possible when grassroots youth innovation is integrated into powerful global accountability networks. This entire milestone initiative is proudly supported and co-funded by the <a href="https://digitaldemocracyinitiative.net" target="_blank" rel="noopener noreferrer">Digital Democracy Initiative (DDI)</a>, in profound partnership with <a href="https://www.accountabilitylab.org" target="_blank" rel="noopener noreferrer">Accountability Lab</a> and <a href="https://ddisouthasia.org" target="_blank" rel="noopener noreferrer">DDI South Asia</a>. Together, we are proving that data-driven democracy is not just a concept—it is a functional, live infrastructure that delivers real-world resilience to the people who need it most.</p>
+
+        <blockquote>
+          "Data-driven democracy is not just a concept—it is a functional, live infrastructure that delivers real-world resilience."
+          <footer>— For The Light</footer>
+        </blockquote>
+      `,
+    },
   }
 
   const article = articles[id || '1'] || articles['1']
