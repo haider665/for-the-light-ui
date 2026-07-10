@@ -47,6 +47,7 @@ const partners = [
   { src: '/images/new-partners/10.png', alt: 'Partner 10' },
   { src: '/images/new-partners/11.png', alt: 'Partner 11' },
   { src: '/images/new-partners/12.png', alt: 'Partner 12' },
+  { src: '/images/new-partners/Aspire.png', alt: 'Aspire' },
   { src: '/images/new-partners/13.png', alt: 'Partner 13' },
   { src: '/images/new-partners/JCI logo.png', alt: 'JCI' },
   // { src: '/images/new-partners/ftl logo.png', alt: 'For The Light' },
