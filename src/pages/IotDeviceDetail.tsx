@@ -54,10 +54,13 @@ const IotDeviceDetail = () => {
   const [playbackSpeedMs, setPlaybackSpeedMs] = useState(800)
 
   useEffect(() => {
+    const pad = (n: number) => String(n).padStart(2, '0')
+    const toLocal = (d: Date) =>
+      `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
     const now = new Date()
     const fromDate = new Date(now.getTime() - 6 * 60 * 60 * 1000)
-    setFrom(fromDate.toISOString().slice(0, 16))
-    setTo(now.toISOString().slice(0, 16))
+    setFrom(toLocal(fromDate))
+    setTo(toLocal(now))
   }, [])
 
   useEffect(() => {

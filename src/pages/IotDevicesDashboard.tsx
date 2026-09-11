@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Activity, AlertTriangle, Search, WifiOff } from 'lucide-react'
+import { Activity, AlertTriangle, Search, WifiOff, Eye } from 'lucide-react'
 import { DivIcon, Icon } from 'leaflet'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import Sidebar from '../components/dashboard/Sidebar'
@@ -73,7 +73,6 @@ const IotDevicesDashboard = () => {
     fetchDevices()
   }, [])
 
-
   const metrics = useMemo(() => {
     return {
       total: devices.length,
@@ -128,6 +127,7 @@ const IotDevicesDashboard = () => {
           </div>
           <section className="flex-1 min-h-[60vh]">
             <div className="max-w-7xl mx-auto space-y-6">
+              {/* Header + KPI Cards */}
               <div className="rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-sm p-6 md:p-8 shadow-sm">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
@@ -172,119 +172,137 @@ const IotDevicesDashboard = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 xl:grid-cols-[360px_minmax(0,1fr)] gap-6">
-                <aside className="rounded-2xl border bg-white shadow-sm overflow-hidden">
-                  <div className="p-4 border-b">
-                    <div className="relative">
-                      <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                      <input
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Search by device ID or name"
-                        className="w-full rounded-lg border border-gray-300 pl-9 pr-3 py-2 text-sm"
-                      />
-                    </div>
+              {/* Device Map — full width */}
+              <div className="rounded-2xl border bg-white shadow-sm overflow-hidden">
+                <div className="p-4 border-b flex flex-wrap items-center justify-between gap-2">
+                  <h2 className="text-lg font-semibold text-gray-900">Device Map</h2>
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-green-500" />ONLINE</span>
+                    <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-yellow-500" />DELAYED</span>
+                    <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-red-500" />OFFLINE</span>
                   </div>
+                </div>
 
-                  <div className="max-h-[580px] overflow-y-auto p-3 space-y-2">
-                    {!loading && filtered.length === 0 && (
-                      <div className="rounded-xl border border-dashed p-5 text-sm text-gray-500 text-center">No devices found.</div>
-                    )}
+                <div className="h-[420px] w-full">
+                  <MapContainer center={selectedPosition ?? defaultCenter} zoom={8} style={{ height: '100%', width: '100%' }}>
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution="&copy; OpenStreetMap contributors"
+                    />
 
-                    {filtered.map((device) => {
-                      const active = selectedDeviceId === device.deviceId
+                    {selectedPosition && <MapFocus lat={selectedPosition[0]} lng={selectedPosition[1]} />}
+
+                    {devicesWithCoords.map((device) => {
+                      const isOnline = device.status === 'ONLINE'
+                      const lat = device.latitude as number
+                      const lng = device.longitude as number
                       return (
-                        <button
-                          key={device.deviceId}
-                          onClick={() => setSelectedDeviceId(device.deviceId)}
-                          className={`w-full text-left rounded-xl border p-3 transition ${active ? 'border-primary bg-primary/5' : 'hover:bg-gray-50 border-gray-200'}`}
-                        >
-                          <div className="flex items-start justify-between gap-2">
-                            <div>
-                              <p className="font-semibold text-sm text-gray-900">{device.deviceId}</p>
-                              <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{device.name}</p>
-                            </div>
-                            <span className={`inline-flex px-2 py-0.5 rounded text-[11px] font-medium ${statusPill[device.status]}`}>
-                              {device.status}
-                            </span>
-                          </div>
-                          <div className="mt-2 grid grid-cols-2 gap-2 text-[11px] text-gray-500">
-                            <p>Lat: {device.latitude ?? '—'}</p>
-                            <p>Lng: {device.longitude ?? '—'}</p>
-                          </div>
-                        </button>
+                        <Fragment key={device.deviceId}>
+                          {isOnline && <Marker position={[lat, lng]} icon={pulseIcon} key={`${device.deviceId}-pulse`} />}
+                          <Marker
+                            position={[lat, lng]}
+                            icon={markerIcon}
+                            eventHandlers={{
+                              click: () => setSelectedDeviceId(device.deviceId),
+                            }}
+                          >
+                            <Popup>
+                              <div className="text-sm">
+                                <p className="font-semibold">{device.deviceId}</p>
+                                <p>{device.name}</p>
+                                <p>Status: {device.status}</p>
+                                <p>Last Seen: {fmtDate(device.lastSeen)}</p>
+                                <p className="mt-2">
+                                  <Link to={`/admin/iot/devices/${device.deviceId}`} className="text-blue-600 hover:underline">
+                                    View details →
+                                  </Link>
+                                </p>
+                              </div>
+                            </Popup>
+                          </Marker>
+                        </Fragment>
                       )
                     })}
+                  </MapContainer>
+                </div>
+              </div>
+
+              {/* Device Table */}
+              <div className="rounded-2xl border bg-white shadow-sm overflow-hidden">
+                <div className="p-4 border-b flex flex-wrap items-center justify-between gap-3">
+                  <h2 className="text-lg font-semibold text-gray-900">Devices</h2>
+                  <div className="relative w-full sm:w-72">
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <input
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search by device ID or name"
+                      className="w-full rounded-lg border border-gray-300 pl-9 pr-3 py-2 text-sm"
+                    />
                   </div>
-                </aside>
+                </div>
 
-                <div className="rounded-2xl border bg-white shadow-sm overflow-hidden">
-                  <div className="p-4 border-b flex flex-wrap items-center justify-between gap-2">
-                    <h2 className="text-lg font-semibold text-gray-900">Device Map</h2>
-                    <div className="flex items-center gap-2 text-xs">
-                      <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-green-500" />ONLINE</span>
-                      <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-yellow-500" />DELAYED</span>
-                      <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-red-500" />OFFLINE</span>
-                    </div>
-                  </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Device ID</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Latitude</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Longitude</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Last Seen</th>
+                        <th className="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-100">
+                      {loading && devices.length === 0 && (
+                        <tr>
+                          <td colSpan={7} className="px-4 py-10 text-center text-sm text-gray-500">Loading devices…</td>
+                        </tr>
+                      )}
 
-                  <div className="h-[500px] w-full">
-                    <MapContainer center={selectedPosition ?? defaultCenter} zoom={8} style={{ height: '100%', width: '100%' }}>
-                      <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution="&copy; OpenStreetMap contributors"
-                      />
+                      {!loading && filtered.length === 0 && (
+                        <tr>
+                          <td colSpan={7} className="px-4 py-10 text-center text-sm text-gray-500">
+                            {query.trim() ? 'No devices match your search.' : 'No devices found.'}
+                          </td>
+                        </tr>
+                      )}
 
-                      {selectedPosition && <MapFocus lat={selectedPosition[0]} lng={selectedPosition[1]} />}
-
-                      {devicesWithCoords.map((device) => {
-                        const isOnline = device.status === 'ONLINE'
-                        const lat = device.latitude as number
-                        const lng = device.longitude as number
+                      {filtered.map((device) => {
+                        const isSelected = selectedDeviceId === device.deviceId
                         return (
-                          <Fragment key={device.deviceId}>
-                            {isOnline && <Marker position={[lat, lng]} icon={pulseIcon} key={`${device.deviceId}-pulse`} />}
-                            <Marker
-                              position={[lat, lng]}
-                              icon={markerIcon}
-                              eventHandlers={{
-                                click: () => setSelectedDeviceId(device.deviceId),
-                              }}
-                            >
-                              <Popup>
-                                <div className="text-sm">
-                                  <p className="font-semibold">{device.deviceId}</p>
-                                  <p>{device.name}</p>
-                                  <p>Status: {device.status}</p>
-                                  <p>Last Seen: {fmtDate(device.lastSeen)}</p>
-                                  <p className="mt-2">
-                                    <Link to={`/admin/iot/devices/${device.deviceId}`} className="text-blue-600 hover:underline">
-                                      Open detail
-                                    </Link>
-                                  </p>
-                                </div>
-                              </Popup>
-                            </Marker>
-                          </Fragment>
+                          <tr
+                            key={device.deviceId}
+                            className={`cursor-pointer transition-colors ${isSelected ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
+                            onClick={() => setSelectedDeviceId(device.deviceId)}
+                          >
+                            <td className="px-4 py-3 text-sm font-medium text-gray-900 whitespace-nowrap">{device.deviceId}</td>
+                            <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">{device.name}</td>
+                            <td className="px-4 py-3 whitespace-nowrap">
+                              <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${statusPill[device.status]}`}>
+                                {device.status}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-sm text-gray-600">{device.latitude ?? '—'}</td>
+                            <td className="px-4 py-3 text-sm text-gray-600">{device.longitude ?? '—'}</td>
+                            <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{fmtDate(device.lastSeen)}</td>
+                            <td className="px-4 py-3 text-center whitespace-nowrap">
+                              <Link
+                                to={`/admin/iot/devices/${device.deviceId}`}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-900 text-white text-xs font-medium hover:bg-black transition-colors"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Eye size={14} />
+                                Details
+                              </Link>
+                            </td>
+                          </tr>
                         )
                       })}
-                    </MapContainer>
-                  </div>
-
-                  <div className="p-4 border-t bg-slate-50 text-sm">
-                    {selectedDevice ? (
-                      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-gray-700">
-                        <span><span className="font-medium">Selected:</span> {selectedDevice.deviceId}</span>
-                        <span><span className="font-medium">Name:</span> {selectedDevice.name}</span>
-                        <span><span className="font-medium">Last Seen:</span> {fmtDate(selectedDevice.lastSeen)}</span>
-                        <Link to={`/admin/iot/devices/${selectedDevice.deviceId}`} className="text-blue-600 hover:underline font-medium">
-                          Open history
-                        </Link>
-                      </div>
-                    ) : (
-                      <p className="text-gray-500">Select device from left panel to focus map and view quick details.</p>
-                    )}
-                  </div>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
