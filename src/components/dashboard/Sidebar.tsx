@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { FilePlus, List, Users as UsersIcon, Calendar, AlertTriangle } from 'lucide-react'
+import { FilePlus, List, Users as UsersIcon, Calendar, AlertTriangle, Radar } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
 const Sidebar = () => {
@@ -41,6 +41,10 @@ const Sidebar = () => {
               <Link to="/admin/incidents" className={`${itemBase} ${pathname === '/admin/incidents' ? active : inactive}`}>
                 <AlertTriangle size={18} />
                 <span>Incident Management</span>
+              </Link>
+              <Link to="/admin/iot/devices" className={`${itemBase} ${pathname.startsWith('/admin/iot/devices') ? active : inactive}`}>
+                <Radar size={18} />
+                <span>IoT Tracking</span>
               </Link>
             </nav>
           </>

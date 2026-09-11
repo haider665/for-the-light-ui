@@ -21,6 +21,8 @@ import Programs from './pages/Programs'
 import PublicPrograms from './pages/PublicPrograms'
 import ProgramDetail from './pages/ProgramDetail'
 import IncidentManagement from './pages/IncidentManagement'
+import IotDevicesDashboard from './pages/IotDevicesDashboard'
+import IotDeviceDetail from './pages/IotDeviceDetail'
 
 function App() {
   return (
@@ -49,6 +51,8 @@ function App() {
                 <Route path="/users" element={<Users />} />
                 <Route path="/admin/programs" element={<Programs />} />
                 <Route path="/admin/incidents" element={<IncidentManagement />} />
+                <Route path="/admin/iot/devices" element={<IotDevicesDashboard />} />
+                <Route path="/admin/iot/devices/:deviceId" element={<IotDeviceDetail />} />
               </Route>
               <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
             </Routes>
