@@ -1,5 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Activity, AlertTriangle, Search, Wifi, WifiOff } from 'lucide-react'
+import { DivIcon, Icon } from 'leaflet'
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import Sidebar from '../components/dashboard/Sidebar'
 import { getIotDevices, getIotWebSocketUrl, IotDevice, IotLocationUpdatedEvent } from '../services/iotService'
 
@@ -16,12 +19,42 @@ const statusPill: Record<IotDevice['status'], string> = {
   OFFLINE: 'bg-red-100 text-red-800',
 }
 
+const defaultCenter: [number, number] = [23.8103, 90.4125]
+
+const markerIcon = new Icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
+
+const pulseIcon = new DivIcon({
+  className: 'iot-pulse-icon',
+  html: '<span class="iot-pulse-dot"></span>',
+  iconSize: [14, 14],
+  iconAnchor: [7, 7],
+})
+
+function MapFocus({ lat, lng }: { lat: number; lng: number }) {
+  const map = useMap()
+
+  useEffect(() => {
+    map.flyTo([lat, lng], Math.max(map.getZoom(), 11), { duration: 0.6 })
+  }, [lat, lng, map])
+
+  return null
+}
+
 const IotDevicesDashboard = () => {
   const [devices, setDevices] = useState<IotDevice[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [query, setQuery] = useState('')
   const [socketState, setSocketState] = useState<'connecting' | 'connected' | 'disconnected'>('connecting')
+  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null)
 
   const wsRef = useRef<WebSocket | null>(null)
   const reconnectTimerRef = useRef<number | null>(null)
@@ -33,6 +66,7 @@ const IotDevicesDashboard = () => {
     try {
       const data = await getIotDevices()
       setDevices(data)
+      setSelectedDeviceId((prev) => prev ?? data[0]?.deviceId ?? null)
     } catch (e: any) {
       setError(e?.response?.data?.error || e?.message || 'Failed to load devices')
     } finally {
@@ -78,6 +112,7 @@ const IotDevicesDashboard = () => {
                 lastDeviceTimestamp: message.timestamp,
                 status: message.status,
               }
+              setSelectedDeviceId((prev) => prev ?? incoming.deviceId)
               return [incoming, ...prev]
             }
 
@@ -155,56 +190,89 @@ const IotDevicesDashboard = () => {
     return devices.filter(d => d.deviceId.toLowerCase().includes(q) || d.name.toLowerCase().includes(q))
   }, [devices, query])
 
+  const devicesWithCoords = useMemo(() => {
+    return devices.filter((d) => d.latitude != null && d.longitude != null)
+  }, [devices])
+
+  const selectedDevice = useMemo(() => {
+    if (!selectedDeviceId) return null
+    return devices.find((d) => d.deviceId === selectedDeviceId) ?? null
+  }, [devices, selectedDeviceId])
+
+  const selectedPosition = useMemo(() => {
+    if (!selectedDevice || selectedDevice.latitude == null || selectedDevice.longitude == null) return null
+    return [selectedDevice.latitude, selectedDevice.longitude] as [number, number]
+  }, [selectedDevice])
+
   return (
-    <main className="pt-24">
+    <main className="pt-24 pb-10 bg-gradient-to-b from-slate-50 via-white to-slate-100">
+      <style>{`
+        .iot-pulse-dot {
+          width: 14px;
+          height: 14px;
+          border-radius: 9999px;
+          background: #22c55e;
+          box-shadow: 0 0 0 rgba(34,197,94,0.7);
+          animation: iotPulse 2s infinite;
+          display: inline-block;
+        }
+        @keyframes iotPulse {
+          0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.7); }
+          70% { box-shadow: 0 0 0 14px rgba(34,197,94,0); }
+          100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+        }
+      `}</style>
       <div className="container mx-auto px-4">
         <div className="flex gap-6">
           <div className="hidden md:block">
             <Sidebar />
           </div>
           <section className="flex-1 min-h-[60vh]">
-            <div className="max-w-6xl mx-auto space-y-6">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900">IoT GPS Tracking</h1>
-                  <p className="text-gray-600 mt-1">Phase 1 view: verify ingested devices and latest telemetry state.</p>
+            <div className="max-w-7xl mx-auto space-y-6">
+              <div className="rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-sm p-6 md:p-8 shadow-sm">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold tracking-wider uppercase text-primary">Operations Dashboard</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mt-1">IoT GPS Tracking</h1>
+                    <p className="text-gray-600 mt-2">Live fleet visibility with websocket updates and historical traceability.</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                      socketState === 'connected'
+                        ? 'bg-green-100 text-green-800'
+                        : socketState === 'connecting'
+                        ? 'bg-yellow-100 text-yellow-800'
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {socketState === 'connected' ? <Wifi size={13} className="mr-1" /> : <WifiOff size={13} className="mr-1" />}WS {socketState}
+                    </span>
+                    <button
+                      onClick={fetchDevices}
+                      className="px-4 py-2 rounded-full border border-gray-300 bg-white hover:bg-gray-50 text-sm"
+                      disabled={loading}
+                    >
+                      {loading ? 'Refreshing…' : 'Refresh'}
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
-                    socketState === 'connected'
-                      ? 'bg-green-100 text-green-800'
-                      : socketState === 'connecting'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    WS {socketState}
-                  </span>
-                  <button
-                    onClick={fetchDevices}
-                    className="px-4 py-2 rounded-md border border-gray-300 bg-white hover:bg-gray-50"
-                    disabled={loading}
-                  >
-                    {loading ? 'Refreshing…' : 'Refresh'}
-                  </button>
-                </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                  <p className="text-sm text-gray-500">Total Devices</p>
-                  <p className="text-2xl font-semibold mt-2">{metrics.total}</p>
-                </div>
-                <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                  <p className="text-sm text-gray-500">Online</p>
-                  <p className="text-2xl font-semibold mt-2 text-green-700">{metrics.online}</p>
-                </div>
-                <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                  <p className="text-sm text-gray-500">Delayed</p>
-                  <p className="text-2xl font-semibold mt-2 text-yellow-700">{metrics.delayed}</p>
-                </div>
-                <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                  <p className="text-sm text-gray-500">Offline</p>
-                  <p className="text-2xl font-semibold mt-2 text-red-700">{metrics.offline}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-6">
+                  <div className="rounded-2xl border bg-gradient-to-br from-slate-50 to-white p-5 shadow-sm">
+                    <p className="text-sm text-gray-500">Total Devices</p>
+                    <p className="text-3xl font-bold mt-2 text-gray-900">{metrics.total}</p>
+                  </div>
+                  <div className="rounded-2xl border bg-gradient-to-br from-green-50 to-white p-5 shadow-sm">
+                    <p className="text-sm text-green-700 inline-flex items-center gap-1"><Activity size={14} />Online</p>
+                    <p className="text-3xl font-bold mt-2 text-green-700">{metrics.online}</p>
+                  </div>
+                  <div className="rounded-2xl border bg-gradient-to-br from-yellow-50 to-white p-5 shadow-sm">
+                    <p className="text-sm text-yellow-700 inline-flex items-center gap-1"><AlertTriangle size={14} />Delayed</p>
+                    <p className="text-3xl font-bold mt-2 text-yellow-700">{metrics.delayed}</p>
+                  </div>
+                  <div className="rounded-2xl border bg-gradient-to-br from-red-50 to-white p-5 shadow-sm">
+                    <p className="text-sm text-red-700 inline-flex items-center gap-1"><WifiOff size={14} />Offline</p>
+                    <p className="text-3xl font-bold mt-2 text-red-700">{metrics.offline}</p>
+                  </div>
                 </div>
               </div>
 
@@ -214,56 +282,120 @@ const IotDevicesDashboard = () => {
                 </div>
               )}
 
-              <div className="rounded-2xl border bg-white p-4 shadow-sm">
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search by device ID or name"
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                />
-              </div>
+              <div className="grid grid-cols-1 xl:grid-cols-[360px_minmax(0,1fr)] gap-6">
+                <aside className="rounded-2xl border bg-white shadow-sm overflow-hidden">
+                  <div className="p-4 border-b">
+                    <div className="relative">
+                      <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <input
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder="Search by device ID or name"
+                        className="w-full rounded-lg border border-gray-300 pl-9 pr-3 py-2 text-sm"
+                      />
+                    </div>
+                  </div>
 
-              <div className="rounded-2xl border bg-white p-6 shadow-sm overflow-x-auto">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Device Snapshot</h2>
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Device ID</th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Name</th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Latitude</th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Longitude</th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Last Seen</th>
-                      <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Device Time</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-100">
+                  <div className="max-h-[580px] overflow-y-auto p-3 space-y-2">
                     {!loading && filtered.length === 0 && (
-                      <tr>
-                        <td colSpan={7} className="px-3 py-6 text-center text-sm text-gray-500">No devices found.</td>
-                      </tr>
+                      <div className="rounded-xl border border-dashed p-5 text-sm text-gray-500 text-center">No devices found.</div>
                     )}
-                    {filtered.map(device => (
-                      <tr key={device.deviceId} className="hover:bg-gray-50">
-                        <td className="px-3 py-3 text-sm text-gray-900 font-medium">
-                          <Link to={`/admin/iot/devices/${device.deviceId}`} className="text-blue-600 hover:underline">
-                            {device.deviceId}
-                          </Link>
-                        </td>
-                        <td className="px-3 py-3 text-sm text-gray-700">{device.name}</td>
-                        <td className="px-3 py-3 text-sm">
-                          <span className={`inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusPill[device.status]}`}>
-                            {device.status}
-                          </span>
-                        </td>
-                        <td className="px-3 py-3 text-sm text-gray-700">{device.latitude ?? '—'}</td>
-                        <td className="px-3 py-3 text-sm text-gray-700">{device.longitude ?? '—'}</td>
-                        <td className="px-3 py-3 text-sm text-gray-700 whitespace-nowrap">{fmtDate(device.lastSeen)}</td>
-                        <td className="px-3 py-3 text-sm text-gray-700 whitespace-nowrap">{fmtDate(device.lastDeviceTimestamp)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+
+                    {filtered.map((device) => {
+                      const active = selectedDeviceId === device.deviceId
+                      return (
+                        <button
+                          key={device.deviceId}
+                          onClick={() => setSelectedDeviceId(device.deviceId)}
+                          className={`w-full text-left rounded-xl border p-3 transition ${active ? 'border-primary bg-primary/5' : 'hover:bg-gray-50 border-gray-200'}`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <p className="font-semibold text-sm text-gray-900">{device.deviceId}</p>
+                              <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{device.name}</p>
+                            </div>
+                            <span className={`inline-flex px-2 py-0.5 rounded text-[11px] font-medium ${statusPill[device.status]}`}>
+                              {device.status}
+                            </span>
+                          </div>
+                          <div className="mt-2 grid grid-cols-2 gap-2 text-[11px] text-gray-500">
+                            <p>Lat: {device.latitude ?? '—'}</p>
+                            <p>Lng: {device.longitude ?? '—'}</p>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </aside>
+
+                <div className="rounded-2xl border bg-white shadow-sm overflow-hidden">
+                  <div className="p-4 border-b flex flex-wrap items-center justify-between gap-2">
+                    <h2 className="text-lg font-semibold text-gray-900">Live Device Map</h2>
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-green-500" />ONLINE</span>
+                      <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-yellow-500" />DELAYED</span>
+                      <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-red-500" />OFFLINE</span>
+                    </div>
+                  </div>
+
+                  <div className="h-[500px] w-full">
+                    <MapContainer center={selectedPosition ?? defaultCenter} zoom={8} style={{ height: '100%', width: '100%' }}>
+                      <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution="&copy; OpenStreetMap contributors"
+                      />
+
+                      {selectedPosition && <MapFocus lat={selectedPosition[0]} lng={selectedPosition[1]} />}
+
+                      {devicesWithCoords.map((device) => {
+                        const isOnline = device.status === 'ONLINE'
+                        const lat = device.latitude as number
+                        const lng = device.longitude as number
+                        return (
+                          <Fragment key={device.deviceId}>
+                            {isOnline && <Marker position={[lat, lng]} icon={pulseIcon} key={`${device.deviceId}-pulse`} />}
+                            <Marker
+                              position={[lat, lng]}
+                              icon={markerIcon}
+                              eventHandlers={{
+                                click: () => setSelectedDeviceId(device.deviceId),
+                              }}
+                            >
+                              <Popup>
+                                <div className="text-sm">
+                                  <p className="font-semibold">{device.deviceId}</p>
+                                  <p>{device.name}</p>
+                                  <p>Status: {device.status}</p>
+                                  <p>Last Seen: {fmtDate(device.lastSeen)}</p>
+                                  <p className="mt-2">
+                                    <Link to={`/admin/iot/devices/${device.deviceId}`} className="text-blue-600 hover:underline">
+                                      Open detail
+                                    </Link>
+                                  </p>
+                                </div>
+                              </Popup>
+                            </Marker>
+                          </Fragment>
+                        )
+                      })}
+                    </MapContainer>
+                  </div>
+
+                  <div className="p-4 border-t bg-slate-50 text-sm">
+                    {selectedDevice ? (
+                      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-gray-700">
+                        <span><span className="font-medium">Selected:</span> {selectedDevice.deviceId}</span>
+                        <span><span className="font-medium">Name:</span> {selectedDevice.name}</span>
+                        <span><span className="font-medium">Last Seen:</span> {fmtDate(selectedDevice.lastSeen)}</span>
+                        <Link to={`/admin/iot/devices/${selectedDevice.deviceId}`} className="text-blue-600 hover:underline font-medium">
+                          Open history
+                        </Link>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">Select device from left panel to focus map and view quick details.</p>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </section>
