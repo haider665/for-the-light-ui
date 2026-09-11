@@ -1,10 +1,10 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Activity, AlertTriangle, Search, Wifi, WifiOff } from 'lucide-react'
+import { Activity, AlertTriangle, Search, WifiOff } from 'lucide-react'
 import { DivIcon, Icon } from 'leaflet'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import Sidebar from '../components/dashboard/Sidebar'
-import { getIotDevices, getIotWebSocketUrl, IotDevice, IotLocationUpdatedEvent } from '../services/iotService'
+import { getIotDevices, IotDevice } from '../services/iotService'
 
 function fmtDate(value: string | null) {
   if (!value) return '—'
@@ -53,12 +53,7 @@ const IotDevicesDashboard = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [query, setQuery] = useState('')
-  const [socketState, setSocketState] = useState<'connecting' | 'connected' | 'disconnected'>('connecting')
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null)
-
-  const wsRef = useRef<WebSocket | null>(null)
-  const reconnectTimerRef = useRef<number | null>(null)
-  const reconnectAttemptRef = useRef(0)
 
   const fetchDevices = async () => {
     setLoading(true)
@@ -78,102 +73,6 @@ const IotDevicesDashboard = () => {
     fetchDevices()
   }, [])
 
-  useEffect(() => {
-    let cancelled = false
-
-    const connect = () => {
-      if (cancelled) return
-
-      setSocketState('connecting')
-      const ws = new WebSocket(getIotWebSocketUrl())
-      wsRef.current = ws
-
-      ws.onopen = () => {
-        reconnectAttemptRef.current = 0
-        setSocketState('connected')
-        fetchDevices()
-      }
-
-      ws.onmessage = (event) => {
-        try {
-          const message = JSON.parse(event.data) as IotLocationUpdatedEvent
-          if (message.type !== 'LOCATION_UPDATED' || !message.deviceId) return
-
-          setDevices((prev) => {
-            const index = prev.findIndex((d) => d.deviceId === message.deviceId)
-
-            if (index === -1) {
-              const incoming: IotDevice = {
-                deviceId: message.deviceId,
-                name: message.name || message.deviceId,
-                latitude: message.latitude,
-                longitude: message.longitude,
-                lastSeen: message.lastSeen,
-                lastDeviceTimestamp: message.timestamp,
-                status: message.status,
-              }
-              setSelectedDeviceId((prev) => prev ?? incoming.deviceId)
-              return [incoming, ...prev]
-            }
-
-            const current = prev[index]
-            const currentTs = current.lastDeviceTimestamp ? new Date(current.lastDeviceTimestamp).getTime() : 0
-            const incomingTs = message.timestamp ? new Date(message.timestamp).getTime() : 0
-
-            if (incomingTs < currentTs) {
-              const staleUpdated = {
-                ...current,
-                status: message.status,
-                lastSeen: message.lastSeen,
-              }
-              const copy = [...prev]
-              copy[index] = staleUpdated
-              return copy
-            }
-
-            const updated: IotDevice = {
-              ...current,
-              name: message.name || current.name,
-              latitude: message.latitude,
-              longitude: message.longitude,
-              lastSeen: message.lastSeen,
-              lastDeviceTimestamp: message.timestamp,
-              status: message.status,
-            }
-
-            const copy = [...prev]
-            copy[index] = updated
-            return copy
-          })
-        } catch {
-        }
-      }
-
-      ws.onclose = () => {
-        if (cancelled) return
-        setSocketState('disconnected')
-        const nextAttempt = reconnectAttemptRef.current + 1
-        reconnectAttemptRef.current = nextAttempt
-        const delay = Math.min(30000, 1000 * Math.pow(2, Math.min(nextAttempt, 5)))
-        reconnectTimerRef.current = window.setTimeout(connect, delay)
-      }
-
-      ws.onerror = () => {
-        ws.close()
-      }
-    }
-
-    connect()
-
-    return () => {
-      cancelled = true
-      if (reconnectTimerRef.current) {
-        window.clearTimeout(reconnectTimerRef.current)
-      }
-      wsRef.current?.close()
-      wsRef.current = null
-    }
-  }, [])
 
   const metrics = useMemo(() => {
     return {
@@ -234,18 +133,9 @@ const IotDevicesDashboard = () => {
                   <div>
                     <p className="text-xs font-semibold tracking-wider uppercase text-primary">Operations Dashboard</p>
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mt-1">IoT GPS Tracking</h1>
-                    <p className="text-gray-600 mt-2">Live fleet visibility with websocket updates and historical traceability.</p>
+                    <p className="text-gray-600 mt-2">Fleet visibility with real-time data and historical traceability.</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                      socketState === 'connected'
-                        ? 'bg-green-100 text-green-800'
-                        : socketState === 'connecting'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}>
-                      {socketState === 'connected' ? <Wifi size={13} className="mr-1" /> : <WifiOff size={13} className="mr-1" />}WS {socketState}
-                    </span>
                     <button
                       onClick={fetchDevices}
                       className="px-4 py-2 rounded-full border border-gray-300 bg-white hover:bg-gray-50 text-sm"
@@ -330,7 +220,7 @@ const IotDevicesDashboard = () => {
 
                 <div className="rounded-2xl border bg-white shadow-sm overflow-hidden">
                   <div className="p-4 border-b flex flex-wrap items-center justify-between gap-2">
-                    <h2 className="text-lg font-semibold text-gray-900">Live Device Map</h2>
+                    <h2 className="text-lg font-semibold text-gray-900">Device Map</h2>
                     <div className="flex items-center gap-2 text-xs">
                       <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-green-500" />ONLINE</span>
                       <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-yellow-500" />DELAYED</span>
