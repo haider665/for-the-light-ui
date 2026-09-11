@@ -1,4 +1,5 @@
 import api from '../config/api'
+import { API_BASE_URL } from '../config/api'
 
 export type DeviceLiveStatus = 'ONLINE' | 'DELAYED' | 'OFFLINE'
 
@@ -27,6 +28,23 @@ export type IotLocationPage = {
   totalElements: number
   totalPages: number
   items: IotLocationPoint[]
+}
+
+export type IotLocationUpdatedEvent = {
+  type: 'LOCATION_UPDATED'
+  deviceId: string
+  name?: string
+  latitude: number | null
+  longitude: number | null
+  timestamp: string | null
+  lastSeen: string | null
+  status: DeviceLiveStatus
+}
+
+export function getIotWebSocketUrl() {
+  const base = API_BASE_URL.replace(/\/$/, '')
+  const wsBase = base.replace(/^http:\/\//, 'ws://').replace(/^https:\/\//, 'wss://')
+  return `${wsBase}/ws/iot/locations`
 }
 
 export async function getIotDevices() {

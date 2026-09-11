@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Sidebar from '../components/dashboard/Sidebar'
-import { getIotDevices, IotDevice } from '../services/iotService'
+import { getIotDevices, getIotWebSocketUrl, IotDevice, IotLocationUpdatedEvent } from '../services/iotService'
 
 function fmtDate(value: string | null) {
   if (!value) return '—'
@@ -21,6 +21,11 @@ const IotDevicesDashboard = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [query, setQuery] = useState('')
+  const [socketState, setSocketState] = useState<'connecting' | 'connected' | 'disconnected'>('connecting')
+
+  const wsRef = useRef<WebSocket | null>(null)
+  const reconnectTimerRef = useRef<number | null>(null)
+  const reconnectAttemptRef = useRef(0)
 
   const fetchDevices = async () => {
     setLoading(true)
@@ -37,6 +42,102 @@ const IotDevicesDashboard = () => {
 
   useEffect(() => {
     fetchDevices()
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+
+    const connect = () => {
+      if (cancelled) return
+
+      setSocketState('connecting')
+      const ws = new WebSocket(getIotWebSocketUrl())
+      wsRef.current = ws
+
+      ws.onopen = () => {
+        reconnectAttemptRef.current = 0
+        setSocketState('connected')
+        fetchDevices()
+      }
+
+      ws.onmessage = (event) => {
+        try {
+          const message = JSON.parse(event.data) as IotLocationUpdatedEvent
+          if (message.type !== 'LOCATION_UPDATED' || !message.deviceId) return
+
+          setDevices((prev) => {
+            const index = prev.findIndex((d) => d.deviceId === message.deviceId)
+
+            if (index === -1) {
+              const incoming: IotDevice = {
+                deviceId: message.deviceId,
+                name: message.name || message.deviceId,
+                latitude: message.latitude,
+                longitude: message.longitude,
+                lastSeen: message.lastSeen,
+                lastDeviceTimestamp: message.timestamp,
+                status: message.status,
+              }
+              return [incoming, ...prev]
+            }
+
+            const current = prev[index]
+            const currentTs = current.lastDeviceTimestamp ? new Date(current.lastDeviceTimestamp).getTime() : 0
+            const incomingTs = message.timestamp ? new Date(message.timestamp).getTime() : 0
+
+            if (incomingTs < currentTs) {
+              const staleUpdated = {
+                ...current,
+                status: message.status,
+                lastSeen: message.lastSeen,
+              }
+              const copy = [...prev]
+              copy[index] = staleUpdated
+              return copy
+            }
+
+            const updated: IotDevice = {
+              ...current,
+              name: message.name || current.name,
+              latitude: message.latitude,
+              longitude: message.longitude,
+              lastSeen: message.lastSeen,
+              lastDeviceTimestamp: message.timestamp,
+              status: message.status,
+            }
+
+            const copy = [...prev]
+            copy[index] = updated
+            return copy
+          })
+        } catch {
+        }
+      }
+
+      ws.onclose = () => {
+        if (cancelled) return
+        setSocketState('disconnected')
+        const nextAttempt = reconnectAttemptRef.current + 1
+        reconnectAttemptRef.current = nextAttempt
+        const delay = Math.min(30000, 1000 * Math.pow(2, Math.min(nextAttempt, 5)))
+        reconnectTimerRef.current = window.setTimeout(connect, delay)
+      }
+
+      ws.onerror = () => {
+        ws.close()
+      }
+    }
+
+    connect()
+
+    return () => {
+      cancelled = true
+      if (reconnectTimerRef.current) {
+        window.clearTimeout(reconnectTimerRef.current)
+      }
+      wsRef.current?.close()
+      wsRef.current = null
+    }
   }, [])
 
   const metrics = useMemo(() => {
@@ -68,13 +169,24 @@ const IotDevicesDashboard = () => {
                   <h1 className="text-2xl md:text-3xl font-bold text-gray-900">IoT GPS Tracking</h1>
                   <p className="text-gray-600 mt-1">Phase 1 view: verify ingested devices and latest telemetry state.</p>
                 </div>
-                <button
-                  onClick={fetchDevices}
-                  className="px-4 py-2 rounded-md border border-gray-300 bg-white hover:bg-gray-50"
-                  disabled={loading}
-                >
-                  {loading ? 'Refreshing…' : 'Refresh'}
-                </button>
+                <div className="flex items-center gap-2">
+                  <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+                    socketState === 'connected'
+                      ? 'bg-green-100 text-green-800'
+                      : socketState === 'connecting'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-red-100 text-red-800'
+                  }`}>
+                    WS {socketState}
+                  </span>
+                  <button
+                    onClick={fetchDevices}
+                    className="px-4 py-2 rounded-md border border-gray-300 bg-white hover:bg-gray-50"
+                    disabled={loading}
+                  >
+                    {loading ? 'Refreshing…' : 'Refresh'}
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
