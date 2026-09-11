@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Sidebar from '../components/dashboard/Sidebar'
 import { getIotDevices, IotDevice } from '../services/iotService'
 
@@ -19,6 +20,7 @@ const IotDevicesDashboard = () => {
   const [devices, setDevices] = useState<IotDevice[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [query, setQuery] = useState('')
 
   const fetchDevices = async () => {
     setLoading(true)
@@ -45,6 +47,12 @@ const IotDevicesDashboard = () => {
       offline: devices.filter(d => d.status === 'OFFLINE').length,
     }
   }, [devices])
+
+  const filtered = useMemo(() => {
+    if (!query.trim()) return devices
+    const q = query.toLowerCase()
+    return devices.filter(d => d.deviceId.toLowerCase().includes(q) || d.name.toLowerCase().includes(q))
+  }, [devices, query])
 
   return (
     <main className="pt-24">
@@ -94,6 +102,15 @@ const IotDevicesDashboard = () => {
                 </div>
               )}
 
+              <div className="rounded-2xl border bg-white p-4 shadow-sm">
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search by device ID or name"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                />
+              </div>
+
               <div className="rounded-2xl border bg-white p-6 shadow-sm overflow-x-auto">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Device Snapshot</h2>
                 <table className="min-w-full divide-y divide-gray-200">
@@ -109,14 +126,18 @@ const IotDevicesDashboard = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
-                    {!loading && devices.length === 0 && (
+                    {!loading && filtered.length === 0 && (
                       <tr>
                         <td colSpan={7} className="px-3 py-6 text-center text-sm text-gray-500">No devices found.</td>
                       </tr>
                     )}
-                    {devices.map(device => (
+                    {filtered.map(device => (
                       <tr key={device.deviceId} className="hover:bg-gray-50">
-                        <td className="px-3 py-3 text-sm text-gray-900 font-medium">{device.deviceId}</td>
+                        <td className="px-3 py-3 text-sm text-gray-900 font-medium">
+                          <Link to={`/admin/iot/devices/${device.deviceId}`} className="text-blue-600 hover:underline">
+                            {device.deviceId}
+                          </Link>
+                        </td>
                         <td className="px-3 py-3 text-sm text-gray-700">{device.name}</td>
                         <td className="px-3 py-3 text-sm">
                           <span className={`inline-flex px-2 py-0.5 rounded text-xs font-medium ${statusPill[device.status]}`}>

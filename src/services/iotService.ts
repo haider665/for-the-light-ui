@@ -20,6 +20,15 @@ export type IotLocationPoint = {
   eventId?: string | null
 }
 
+export type IotLocationPage = {
+  deviceId: string
+  page: number
+  size: number
+  totalElements: number
+  totalPages: number
+  items: IotLocationPoint[]
+}
+
 export async function getIotDevices() {
   const response = await api.get<IotDevice[]>('/api/iot/devices')
   return response.data
@@ -36,6 +45,6 @@ export async function getIotDeviceLocations(deviceId: string, params: {
   page?: number
   size?: number
 }) {
-  const response = await api.get<IotLocationPoint[]>(`/api/iot/devices/${deviceId}/locations`, { params })
+  const response = await api.get<IotLocationPage>(`/api/iot/devices/${deviceId}/locations`, { params })
   return response.data
 }
