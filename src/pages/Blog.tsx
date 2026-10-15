@@ -17,6 +17,22 @@ const Blog = () => {
 
   const articles = [
     {
+      id: '7',
+      image: "/images/climate_justice_camp/cjc.jpg",
+      category: 'Stories from the Field',
+      title: 'Taking Bangladeshi Climate Innovation to the Global Stage in the Philippines',
+      excerpt:
+        'Founder Alamin Pranto and CTO Mofiz Mojib Haider represented Bangladesh at the Climate Justice Camp in Cebu, Philippines — showcasing civic technology, zero-budget scaling, and forging a cross-border network for climate resilience.',
+    },
+    {
+      id: '6',
+      image: "/images/innovation_fair/innovation_fair.jpg",
+      category: 'Technology & Innovation',
+      title: 'For The Light Recognized at Bangladesh Innovation Fair 2026',
+      excerpt:
+        "For The Light received national recognition at the Ministry of Science & Technology's Bangladesh Innovation Fair 2026 for its climate-tech solutions empowering women in coastal communities.",
+    },
+    {
       id: '5',
       image: "/images/impacts/project_trace_townhall.jpg",
       category: 'Case Study',
@@ -111,22 +127,22 @@ const Blog = () => {
                   <div className="aspect-[4/3] overflow-hidden relative">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent z-10"></div>
                     <img
-                      src="/images/impacts/project_trace_townhall.jpg"
-                      alt="Project TRACE Townhall"
+                      src="/images/climate_justice_camp/cjc.jpg"
+                      alt="Climate Justice Camp"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                   </div>
                   <div className="p-6 md:p-12 flex flex-col justify-center space-y-5 md:space-y-6">
                     <span className="inline-block px-4 py-2 text-xs font-semibold text-primary bg-primary/10 rounded-full uppercase tracking-wider w-fit">
-                      Case Study
+                      Stories from the Field
                     </span>
                     <h2 className="text-2xl md:text-4xl font-bold leading-tight group-hover:text-primary transition-colors">
-                      From Grievance to Resolution: The Complete Data-Driven Journey of Project TRACE
+                      Taking Bangladeshi Climate Innovation to the Global Stage in the Philippines
                     </h2>
                     <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                      How localized grievances were engineered into unassailable datasets that commanded institutional action — 13 infrastructure resolutions in 3 months.
+                      Founder Alamin Pranto and CTO Mofiz Mojib Haider represented Bangladesh at the Climate Justice Camp in Cebu, Philippines — showcasing civic technology, zero-budget scaling, and forging a cross-border network for climate resilience.
                     </p>
-                    <Link to="/article/5" className="text-primary font-semibold inline-flex items-center gap-3 text-lg hover:gap-5 transition-all">
+                    <Link to="/article/7" className="text-primary font-semibold inline-flex items-center gap-3 text-lg hover:gap-5 transition-all">
                       Read the Full Story →
                     </Link>
                   </div>

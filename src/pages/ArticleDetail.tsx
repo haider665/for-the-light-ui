@@ -271,6 +271,118 @@ const ArticleDetail = () => {
         <p>Every woman who succeeds in green entrepreneurship creates ripples—jobs for others, cleaner energy for communities, and hope for a sustainable future.</p>
       `,
     },
+    '7': {
+      title: 'Taking Bangladeshi Climate Innovation to the Global Stage in the Philippines',
+      category: 'Stories from the Field',
+      author: 'For The Light Team',
+      date: 'August 2026',
+      readTime: '7 min read',
+      image: '/images/climate_justice_camp/cjc.jpg',
+      content: `
+        <p class="lead">August 2026 marked a transformative organizational milestone for For The Light. Representing Bangladesh at the prestigious Climate Justice Camp (CJC) in Cebu, Philippines, Founder &amp; CEO Alamin Pranto and Chief Technology Officer Mofiz Mojib Haider embarked on a defining international journey. This was not merely a diplomatic visit; it was a powerful demonstration of organizational strength, bridging the stark realities of frontline climate vulnerability with global, tech-driven strategies.</p>
+
+        <p>The leadership duo arrived with a clear mandate: to assert that the Global South does not just need climate funding; it needs technological sovereignty. They aimed to showcase how For The Light's civic technology and zero-budget scaling strategies are empowering the most vulnerable coastal communities. What unfolded over those intense days was a monumental achievement for the startup, characterized by deep philosophical reflections, engineering breakthroughs on the global stage, and the forging of an unstoppable cross-border network.</p>
+
+        <h2>A Philosophical Arrival: Confronting Climate Fatalism</h2>
+        <p>The journey began with the standard anxieties of international travel. Alamin and Haider arrived carrying a heavy folder of bureaucratic necessities — hotel bookings, bank statements, and return tickets — mentally preparing for rigorous immigration checks.</p>
+
+        <p>Instead, their experience at the Cebu airport set a profound, reflective tone for the entire camp. An immigration officer, reviewing their credentials as climate innovators, bypassed the financial documents. He sighed heavily and asked, "Sir, do these climate camps actually change anything? I went to one once with so much hope, but nothing seems to change."</p>
+
+        <p>The founders offered the only honest answer a climate innovator can give: <em>"Hope is what keeps us alive, brother. How can we ever give it up?"</em></p>
+
+        <p>That brief, unexpected exchange starkly reminded us of the camp's true purpose. Climate fatigue and systemic fatalism form a global paralysis, stretching from the sinking coasts of Bangladesh to the busy airports of the Philippines. For The Light's core mission is to prove that systemic, grassroots change is actively happening — not just in theory, but in practice.</p>
+
+        <h2>Project TRACE on the Global Stage: Bridging Vision and Engineering</h2>
+        <p>A defining moment of the camp was For The Light taking the global stage on a specialized panel focused on grassroots funding and civic tech. The presence of both the CEO and CTO allowed for a uniquely comprehensive, dual-pronged pitch that captivated the international audience.</p>
+
+        <p>While Alamin articulated the strategic vision — emphasizing civic-tech advocacy, community mobilization, and decentralized governance — Haider grounded the discussion in deep-tech rigor. The CTO detailed the engineering architecture behind their solutions, explaining how to build ruggedized IoT hardware, utilize Sub-GHz RF mesh networks, and bypass prohibitively expensive satellite modules.</p>
+
+        <p>Together, they shared the ongoing success of <strong>Project TRACE</strong>. They passionately outlined For The Light's "zero-budget" scaling strategy, demonstrating that with open-source innovation, engineering resilience, and community backing, immense life-saving impact does not require immense traditional funding. The resonance was immediate. Organizers and attendees alike recognized the immense potential of replicating these localized, tech-driven architectures across other vulnerable, data-dark regions in Asia.</p>
+
+        <h2>The Roots Network: Building a Living Infrastructure of Hope</h2>
+        <p>The true magic of CJC 2026, brilliantly orchestrated by the Roots team (with immense gratitude to Sophie, Agus, Bianca, Bruno, Feli, Jo, Ro, and Sandra), was the human infrastructure it built. The For The Light delegation did not just attend sessions; they integrated into a living, rapid-response matrix of cross-border collaboration.</p>
+
+        <p>The newly formed Alumni Directory stands as a testament to the versatility and power of this network, directly connecting the startup with critical leaders such as:</p>
+
+        <ul>
+          <li><strong>Carmi G. Macapagao</strong> (HEARD/ELAC, Philippines): Offering a masterclass in community organizing and disaster risk reduction, whose insights perfectly complement For The Light's early warning deployment strategies.</li>
+          <li><strong>Raia Gallardo</strong> (Bangon Baybay / UP Diliman, Philippines): Bringing vital knowledge in marine ecology and coastal ecosystems, providing the biological context needed to optimize where For The Light places its maritime sensors.</li>
+          <li><strong>Beverley Choo</strong> (GreenCheck, Singapore): Brilliantly connecting the dots between decolonization and Asian climate philanthropy to help structure allied fundraising campaigns.</li>
+          <li><strong>Raya Barreiro</strong> (UMI Fund, Philippines): Teaching the vital art of "hope-based communication" to fundamentally reshape how tech startups narrate climate resilience.</li>
+        </ul>
+
+        <p>This is no longer a passive contact list; it is a rapid-response ecosystem for the planet. Whether the requirement is legal advocacy frameworks or environmental impact research, world-class expertise is now just a message away.</p>
+
+        <h2>Culture Shocks and the "Sauce Revolution"</h2>
+        <p>A global journey naturally comes with cultural trials, and adaptability is the hallmark of any successful startup. For a Bangladeshi tech delegation accustomed to rich, fiery spices, the local culinary palette presented a massive, albeit humorous, shock. From surviving on green rice and dry fish on a Firefly flight to navigating breakfast buffets of plain white rice, boiled eggs, and sausages, it was a true test of endurance.</p>
+
+        <p>The founders' survival strategy quickly evolved into a "Sauce Revolution" — mixing Sriracha, soy sauce, ketchup, and mayonnaise into rice just to find a hint of familiar flavor. Even an attempt to escape to a local convenience store backfired when a bag of chips turned out to be seafood-flavored. Yet, these shared vulnerabilities and struggles over meals broke the ice instantly, turning international delegates into a close-knit family and proving that the best networking often happens over shared laughter at a dinner table.</p>
+
+        <h2>Diving into the Deep End</h2>
+        <p>During the trip, a friend — an award-winning filmmaker and scuba instructor — shared a video of herself swimming peacefully alongside massive Thresher and White-tip sharks in Philippine waters. It struck the founders as the perfect metaphor for their work in the climate-tech sector.</p>
+
+        <p>There are people terrified of stepping into a shallow pool, and there are those who strap on an oxygen tank to dive into the abyss. Climate tech innovation requires the latter. Grassroots startups cannot stay in their comfort zones, bound by the fear of hardware failure, bureaucratic red tape, or a lack of traditional funding. They must dive into the deep end, trusting the global community they have built to swim alongside them.</p>
+
+        <p>Alamin and Haider returned to Dhaka with a renewed vision, a sharpened technological roadmap, and an elevated organizational profile on the world stage. The triumphant journey to Cebu proved that the global drive for climate justice is not just a policy debate — it is a vibrant, resilient movement driven by actionable, deep-tech innovation.</p>
+      `,
+    },
+    '6': {
+      title: 'For The Light Recognized at Bangladesh Innovation Fair 2026',
+      category: 'Technology & Innovation',
+      author: 'For The Light Team',
+      date: 'September 14, 2026',
+      readTime: '6 min read',
+      image: '/images/innovation_fair/innovation_fair.jpg',
+      content: `
+        <p class="lead">On September 14, 2026, For The Light was awarded national recognition at the Bangladesh Innovation Fair 2026 — a prestigious three-day event organized by the Ministry of Science &amp; Technology, held at Bashundhara, Dhaka. The recognition celebrates For The Light's pioneering climate-technology solutions designed to protect and empower women in coastal Bangladesh.</p>
+
+        <h2>A National Stage for Grassroots Innovation</h2>
+        <p>The Bangladesh Innovation Fair 2026, themed <em>"Innovate to Market,"</em> brought together the country's most impactful technology startups, research institutions, and social enterprises under one roof from September 12–14. The event served as a critical bridge between grassroots innovators and national policymakers, investors, and international development partners.</p>
+
+        <p>For The Light stood among the most distinguished exhibitors — recognized not merely for technological novelty, but for the measurable human impact embedded in every solution we deploy. At the Closing Ceremony, our team received a formal Certificate of Recognition from senior officials of the Ministry of Science &amp; Technology, in acknowledgment of our work at the intersection of climate resilience, gender equity, and civic technology.</p>
+
+        <h2>The Innovation That Earned Recognition</h2>
+        <p>Our exhibition at the Innovation Fair spotlighted three flagship innovations that have transformed lives in coastal Bangladesh:</p>
+
+        <h3>1. The Guardian — Climate Wearable for Women</h3>
+        <p>The Guardian is our award-winning wearable device that provides real-time early warning alerts for extreme weather events, solar-powered independence, and digital connectivity to women in climate-vulnerable coastal districts. Deployed to over 5,000 women across Patuakhali, Barguna, and Khulna, The Guardian has fundamentally shifted how vulnerable communities receive and respond to climate threats.</p>
+
+        <h3>2. Project TRACE — Civic Data Platform</h3>
+        <p>Project TRACE (Transparency through Reporting, Advocacy, and Civic Engagement) demonstrated how 50 Digital Civic Ambassadors used our secure reporting platform to convert 128 community grievances into 60 verified, GPS-tagged infrastructure reports — directly resulting in 13 government-led physical resolutions in three months. The platform's success has since been compiled into a case study submission for global civil society alliance CIVICUS.</p>
+
+        <h3>3. Green Entrepreneurship Digital Ecosystem</h3>
+        <p>Our digital marketplace and training platform has helped over 500 women-led green businesses access tools, mentorship, micro-financing connections, and expanded markets — contributing to an average 65% increase in monthly income for participating entrepreneurs.</p>
+
+        <h2>The Ceremony: A Moment of Collective Pride</h2>
+        <p>The closing ceremony was presided over by senior officials from the Ministry of Science &amp; Technology alongside distinguished guests from academia, the private sector, and international development organizations. Representatives from For The Light received the certificate of recognition on behalf of the entire network of Digital Civic Ambassadors, women entrepreneurs, and community members whose courage and dedication make our work possible.</p>
+
+        <p>"This recognition is not ours alone," said a For The Light representative at the ceremony. "It belongs to every woman in coastal Bangladesh who trusted us, every ambassador who gathered data in the rain, and every community that dared to demand better from their government."</p>
+
+        <h2>What This Recognition Means</h2>
+        <p>National recognition from the Ministry of Science &amp; Technology affirms that community-centered, gender-responsive technology is not a niche concern — it is a national priority. For The Light's inclusion in this prestigious forum signals growing institutional momentum behind tech-driven solutions for climate adaptation and social equity.</p>
+
+        <p>Beyond the certificate, the Innovation Fair opened critical new doors:</p>
+
+        <ul>
+          <li>Engagement with senior policymakers for potential integration of The Guardian into national disaster preparedness frameworks</li>
+          <li>Expressions of interest from technology partners for co-developing the next generation of the TRACE platform</li>
+          <li>Media coverage that has significantly amplified awareness of our mission across Bangladesh</li>
+          <li>New partnership discussions with national universities to scale our Digital Civic Ambassador program</li>
+        </ul>
+
+        <h2>The Road Ahead</h2>
+        <p>The Bangladesh Innovation Fair 2026 is a milestone — but For The Light does not measure success in trophies. We measure it in the number of women who receive storm alerts before it is too late, in the infrastructure repaired because a young ambassador documented it precisely, and in the green businesses that grow from a single training session into thriving enterprises.</p>
+
+        <p>With the momentum of national recognition behind us, we are accelerating plans to deploy The Guardian to 15,000 additional women by the end of 2026, expand Project TRACE to three new districts, and build new institutional partnerships that ensure our technology reaches those who need it most.</p>
+
+        <blockquote>
+          "Innovation means nothing if it does not reach the most vulnerable. This recognition reminds us why we began — and why we will not stop."
+          <footer>— For The Light Team, Bangladesh Innovation Fair 2026</footer>
+        </blockquote>
+
+        <p>Thank you to the Ministry of Science &amp; Technology, to our partners, and most importantly — to the communities of coastal Bangladesh who inspire everything we do.</p>
+      `,
+    },
     '5': {
       title: 'From Grievance to Resolution: The Complete Data-Driven Journey of Project TRACE',
       category: 'Case Study',

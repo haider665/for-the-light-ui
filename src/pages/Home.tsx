@@ -388,25 +388,25 @@ const Home = () => {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 max-w-7xl mx-auto">
             <BlogCard
+              image="/images/climate_justice_camp/cjc.jpg"
+              category="Stories from the Field"
+              title="Taking Bangladeshi Climate Innovation to the Global Stage in the Philippines"
+              excerpt="Founder Alamin Pranto and CTO Mofiz Mojib Haider represented Bangladesh at the Climate Justice Camp in Cebu, Philippines — showcasing civic technology, zero-budget scaling, and forging a cross-border network for climate resilience."
+              link="/article/7"
+            />
+            <BlogCard
+              image="/images/innovation_fair/innovation_fair.jpg"
+              category="Technology & Innovation"
+              title="For The Light Recognized at Bangladesh Innovation Fair 2026"
+              excerpt="For The Light received national recognition at the Ministry of Science & Technology's Bangladesh Innovation Fair 2026 for its climate-tech solutions empowering women in coastal communities."
+              link="/article/6"
+            />
+            <BlogCard
               image="/images/impacts/project_trace_townhall.jpg"
               category="Case Study"
               title="From Grievance to Resolution: The Complete Data-Driven Journey of Project TRACE"
               excerpt="How localized grievances were engineered into unassailable datasets that commanded institutional action — 13 infrastructure resolutions in 3 months."
               link="/article/5"
-            />
-            <BlogCard
-              image="/images/backgrounds/communityLearning.jpg"
-              category="Technology & Innovation"
-              title="The Resilience Loop: How Technology Empowers Women in Coastal Bangladesh"
-              excerpt="Explore how innovative technologies are helping women in coastal communities adapt to climate change and build resilience."
-              link="/article/1"
-            />
-            <BlogCard
-              image="/images/backgrounds/fatima.jpg"
-              category="Policy & Advocacy"
-              title="From Fatima to Policy: Amplifying Women's Voices"
-              excerpt="Learn about our advocacy efforts to ensure women's voices are heard in climate policy decisions."
-              link="/article/2"
             />
           </div>
 
