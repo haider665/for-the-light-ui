@@ -7,7 +7,7 @@ import Button from '../components/ui/Button'
 const stats = [
   { value: '10K+', label: 'Lives Impacted' },
   { value: '20+', label: 'Communities Served' },
-  { value: '16', label: 'Partner Organizations' },
+  { value: '20', label: 'Partner Organizations' },
   { value: '100%', label: 'Program Success Rate' },
 ]
 
@@ -35,6 +35,7 @@ const pillars = [
 ]
 
 const partners = [
+  { src: '/images/new-partners/ministry_of_science.png', alt: 'Ministry of Science' },
   { src: '/images/new-partners/1.png', alt: 'Partner 1' },
   { src: '/images/new-partners/2.png', alt: 'Partner 2' },
   { src: '/images/new-partners/3.png', alt: 'Partner 3' },
@@ -48,6 +49,7 @@ const partners = [
   { src: '/images/new-partners/11.png', alt: 'Partner 11' },
   { src: '/images/new-partners/12.png', alt: 'Partner 12' },
   { src: '/images/new-partners/Aspire.png', alt: 'Aspire' },
+  { src: '/images/new-partners/roots.png', alt: 'Roots' },
   { src: '/images/new-partners/13.png', alt: 'Partner 13' },
   { src: '/images/new-partners/JCI logo.png', alt: 'JCI' },
   // { src: '/images/new-partners/ftl logo.png', alt: 'For The Light' },
@@ -77,7 +79,7 @@ const Home = () => {
       </Hero>
 
       {/* ─── Floating Stats Bar ─── */}
-      <section className="relative z-30 -mt-20 pb-8">
+      <section className="relative z-30 -mt-20 pb-0">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto glass-light rounded-2xl shadow-premium-xl p-8 md:p-10">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
@@ -91,6 +93,56 @@ const Home = () => {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Recognition Banner ─── */}
+      <section className="pt-4 pb-10 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-premium-lg border border-gray-100 overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-center">
+
+              {/* Left — Device Image */}
+              <div className="flex items-center justify-center p-6 md:p-8 bg-gradient-to-br ">
+                <img
+                  src="/images/backgrounds/device.png"
+                  alt="For The Light Guardian Device"
+                  className="w-36 h-36 md:w-44 md:h-44 object-contain rounded-2xl shadow-md"
+                />
+              </div>
+
+              {/* Center — Award Copy */}
+              <div className="flex flex-col justify-center px-8 py-8 border-t md:border-t-0 md:border-l border-gray-100">
+                <span className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full w-fit mb-4">
+                  🏆 Bangladesh Innovation Fair 2026
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight mb-3">
+                  Top 50 Innovator<br />of the Year
+                </h2>
+                <p className="text-gray-600 text-base leading-relaxed mb-5">
+                  Selected from <strong className="text-gray-900">963+ proven innovations</strong> nationwide for{' '}
+                  <strong className="text-gray-900">Project GUARDIAN.</strong>
+                </p>
+                <Link
+                  to="/guardian"
+                  className="inline-flex items-center gap-2 text-primary font-semibold text-base hover:gap-3 transition-all"
+                >
+                  Explore The Guardian <ChevronRight size={18} />
+                </Link>
+              </div>
+
+              {/* Right — Ministry Logo */}
+              <div className="flex flex-col items-center justify-center px-8 py-8 border-t md:border-t-0 md:border-l border-gray-100">
+                <span className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-4">Recognized By</span>
+                <img
+                  src="/images/new-partners/ministry_of_science.png"
+                  alt="Ministry of Science and Technology"
+                  className="w-28 h-28 md:w-32 md:h-32 object-contain"
+                />
+              </div>
+
             </div>
           </div>
         </div>
