@@ -145,10 +145,13 @@ const IotDeviceDetail = () => {
   }, [isPlaying, historyAsc, playbackSpeedMs])
 
   const applyQuickRange = (hours: number) => {
+    const pad = (n: number) => String(n).padStart(2, '0')
+    const toLocal = (d: Date) =>
+      `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
     const now = new Date()
     const fromDate = new Date(now.getTime() - hours * 60 * 60 * 1000)
-    setFrom(fromDate.toISOString().slice(0, 16))
-    setTo(now.toISOString().slice(0, 16))
+    setFrom(toLocal(fromDate))
+    setTo(toLocal(now))
   }
 
   return (
