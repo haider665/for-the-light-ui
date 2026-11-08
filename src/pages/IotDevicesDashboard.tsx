@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Activity, AlertTriangle, Search, WifiOff, Eye } from 'lucide-react'
+import { Activity, AlertTriangle, Search, WifiOff, Eye, Siren } from 'lucide-react'
 import { DivIcon, Icon } from 'leaflet'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import Sidebar from '../components/dashboard/Sidebar'
@@ -34,6 +34,13 @@ const markerIcon = new Icon({
 const pulseIcon = new DivIcon({
   className: 'iot-pulse-icon',
   html: '<span class="iot-pulse-dot"></span>',
+  iconSize: [14, 14],
+  iconAnchor: [7, 7],
+})
+
+const emergencyPulseIcon = new DivIcon({
+  className: 'iot-emergency-icon',
+  html: '<span class="iot-emergency-dot"></span>',
   iconSize: [14, 14],
   iconAnchor: [7, 7],
 })
@@ -79,6 +86,7 @@ const IotDevicesDashboard = () => {
       online: devices.filter(d => d.status === 'ONLINE').length,
       delayed: devices.filter(d => d.status === 'DELAYED').length,
       offline: devices.filter(d => d.status === 'OFFLINE').length,
+      emergency: devices.filter(d => d.emergency === 'E1').length,
     }
   }, [devices])
 
@@ -119,6 +127,20 @@ const IotDevicesDashboard = () => {
           70% { box-shadow: 0 0 0 14px rgba(34,197,94,0); }
           100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
         }
+        .iot-emergency-dot {
+          width: 14px;
+          height: 14px;
+          border-radius: 9999px;
+          background: #ef4444;
+          box-shadow: 0 0 0 rgba(239,68,68,0.7);
+          animation: iotEmergencyPulse 0.8s infinite;
+          display: inline-block;
+        }
+        @keyframes iotEmergencyPulse {
+          0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+          70% { box-shadow: 0 0 0 14px rgba(239,68,68,0); }
+          100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+        }
       `}</style>
       <div className="container mx-auto px-4">
         <div className="flex gap-6">
@@ -146,7 +168,7 @@ const IotDevicesDashboard = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 mt-6">
                   <div className="rounded-2xl border bg-gradient-to-br from-slate-50 to-white p-5 shadow-sm">
                     <p className="text-sm text-gray-500">Total Devices</p>
                     <p className="text-3xl font-bold mt-2 text-gray-900">{metrics.total}</p>
@@ -162,6 +184,10 @@ const IotDevicesDashboard = () => {
                   <div className="rounded-2xl border bg-gradient-to-br from-red-50 to-white p-5 shadow-sm">
                     <p className="text-sm text-red-700 inline-flex items-center gap-1"><WifiOff size={14} />Offline</p>
                     <p className="text-3xl font-bold mt-2 text-red-700">{metrics.offline}</p>
+                  </div>
+                  <div className={`rounded-2xl border p-5 shadow-sm ${metrics.emergency > 0 ? 'bg-gradient-to-br from-red-100 to-red-50 border-red-300 ring-2 ring-red-200' : 'bg-gradient-to-br from-slate-50 to-white'}`}>
+                    <p className={`text-sm inline-flex items-center gap-1 ${metrics.emergency > 0 ? 'text-red-700 font-semibold' : 'text-gray-500'}`}><Siren size={14} />Emergency</p>
+                    <p className={`text-3xl font-bold mt-2 ${metrics.emergency > 0 ? 'text-red-700' : 'text-gray-400'}`}>{metrics.emergency}</p>
                   </div>
                 </div>
               </div>
@@ -180,6 +206,7 @@ const IotDevicesDashboard = () => {
                     <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-green-500" />ONLINE</span>
                     <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-yellow-500" />DELAYED</span>
                     <span className="inline-flex items-center gap-1 text-gray-600"><span className="h-2.5 w-2.5 rounded-full bg-red-500" />OFFLINE</span>
+                    <span className="inline-flex items-center gap-1 text-red-600 font-semibold"><span className="h-2.5 w-2.5 rounded-full bg-red-500 animate-ping" />EMERGENCY</span>
                   </div>
                 </div>
 
@@ -194,11 +221,13 @@ const IotDevicesDashboard = () => {
 
                     {devicesWithCoords.map((device) => {
                       const isOnline = device.status === 'ONLINE'
+                      const isEmergency = device.emergency === 'E1'
                       const lat = device.latitude as number
                       const lng = device.longitude as number
                       return (
                         <Fragment key={device.deviceId}>
-                          {isOnline && <Marker position={[lat, lng]} icon={pulseIcon} key={`${device.deviceId}-pulse`} />}
+                          {isEmergency && <Marker position={[lat, lng]} icon={emergencyPulseIcon} key={`${device.deviceId}-emergency`} />}
+                          {isOnline && !isEmergency && <Marker position={[lat, lng]} icon={pulseIcon} key={`${device.deviceId}-pulse`} />}
                           <Marker
                             position={[lat, lng]}
                             icon={markerIcon}
@@ -252,19 +281,20 @@ const IotDevicesDashboard = () => {
                         <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Latitude</th>
                         <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Longitude</th>
                         <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Last Seen</th>
+                        <th className="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Emergency</th>
                         <th className="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-100">
                       {loading && devices.length === 0 && (
                         <tr>
-                          <td colSpan={7} className="px-4 py-10 text-center text-sm text-gray-500">Loading devices…</td>
+                          <td colSpan={8} className="px-4 py-10 text-center text-sm text-gray-500">Loading devices…</td>
                         </tr>
                       )}
 
                       {!loading && filtered.length === 0 && (
                         <tr>
-                          <td colSpan={7} className="px-4 py-10 text-center text-sm text-gray-500">
+                          <td colSpan={8} className="px-4 py-10 text-center text-sm text-gray-500">
                             {query.trim() ? 'No devices match your search.' : 'No devices found.'}
                           </td>
                         </tr>
@@ -288,6 +318,15 @@ const IotDevicesDashboard = () => {
                             <td className="px-4 py-3 text-sm text-gray-600">{device.latitude ?? '—'}</td>
                             <td className="px-4 py-3 text-sm text-gray-600">{device.longitude ?? '—'}</td>
                             <td className="px-4 py-3 text-sm text-gray-600 whitespace-nowrap">{fmtDate(device.lastSeen)}</td>
+                            <td className="px-4 py-3 text-center whitespace-nowrap">
+                              {device.emergency === 'E1' ? (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800 animate-pulse">
+                                  <Siren size={12} /> SOS
+                                </span>
+                              ) : (
+                                <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">OK</span>
+                              )}
+                            </td>
                             <td className="px-4 py-3 text-center whitespace-nowrap">
                               <Link
                                 to={`/admin/iot/devices/${device.deviceId}`}

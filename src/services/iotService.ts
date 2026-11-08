@@ -10,6 +10,7 @@ export type IotDevice = {
   lastSeen: string | null
   lastDeviceTimestamp: string | null
   status: DeviceLiveStatus
+  emergency: string | null
 }
 
 export type IotLocationPoint = {
@@ -18,6 +19,7 @@ export type IotLocationPoint = {
   deviceTimestamp: string
   receivedAt: string
   eventId?: string | null
+  emergency?: string | null
 }
 
 export type IotLocationPage = {
